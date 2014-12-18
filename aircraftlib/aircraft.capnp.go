@@ -27,7 +27,7 @@ func (s Zdate) MarshalJSON() (bs []byte, err error) { return }
 
 type Zdate_List C.PointerList
 
-func NewZdateList(s *C.Segment, sz int) Zdate_List { return Zdate_List(s.NewUInt32List(sz)) }
+func NewZdateList(s *C.Segment, sz int) Zdate_List { return Zdate_List(s.NewCompositeList(8, 0, sz)) }
 func (s Zdate_List) Len() int                      { return C.PointerList(s).Len() }
 func (s Zdate_List) At(i int) Zdate                { return Zdate(C.PointerList(s).At(i).ToStruct()) }
 func (s Zdate_List) ToArray() []Zdate              { return *(*[]Zdate)(unsafe.Pointer(C.PointerList(s).ToArray())) }
@@ -542,9 +542,11 @@ func (s VerEmpty) MarshalJSON() (bs []byte, err error) { return }
 
 type VerEmpty_List C.PointerList
 
-func NewVerEmptyList(s *C.Segment, sz int) VerEmpty_List { return VerEmpty_List(s.NewVoidList(sz)) }
-func (s VerEmpty_List) Len() int                         { return C.PointerList(s).Len() }
-func (s VerEmpty_List) At(i int) VerEmpty                { return VerEmpty(C.PointerList(s).At(i).ToStruct()) }
+func NewVerEmptyList(s *C.Segment, sz int) VerEmpty_List {
+	return VerEmpty_List(s.NewCompositeList(0, 0, sz))
+}
+func (s VerEmpty_List) Len() int          { return C.PointerList(s).Len() }
+func (s VerEmpty_List) At(i int) VerEmpty { return VerEmpty(C.PointerList(s).At(i).ToStruct()) }
 func (s VerEmpty_List) ToArray() []VerEmpty {
 	return *(*[]VerEmpty)(unsafe.Pointer(C.PointerList(s).ToArray()))
 }
@@ -565,7 +567,7 @@ func (s VerOneData) MarshalJSON() (bs []byte, err error) { return }
 type VerOneData_List C.PointerList
 
 func NewVerOneDataList(s *C.Segment, sz int) VerOneData_List {
-	return VerOneData_List(s.NewUInt16List(sz))
+	return VerOneData_List(s.NewCompositeList(8, 0, sz))
 }
 func (s VerOneData_List) Len() int            { return C.PointerList(s).Len() }
 func (s VerOneData_List) At(i int) VerOneData { return VerOneData(C.PointerList(s).At(i).ToStruct()) }
@@ -1143,9 +1145,11 @@ func (s VoidUnion) MarshalJSON() (bs []byte, err error) { return }
 
 type VoidUnion_List C.PointerList
 
-func NewVoidUnionList(s *C.Segment, sz int) VoidUnion_List { return VoidUnion_List(s.NewUInt16List(sz)) }
-func (s VoidUnion_List) Len() int                          { return C.PointerList(s).Len() }
-func (s VoidUnion_List) At(i int) VoidUnion                { return VoidUnion(C.PointerList(s).At(i).ToStruct()) }
+func NewVoidUnionList(s *C.Segment, sz int) VoidUnion_List {
+	return VoidUnion_List(s.NewCompositeList(8, 0, sz))
+}
+func (s VoidUnion_List) Len() int           { return C.PointerList(s).Len() }
+func (s VoidUnion_List) At(i int) VoidUnion { return VoidUnion(C.PointerList(s).At(i).ToStruct()) }
 func (s VoidUnion_List) ToArray() []VoidUnion {
 	return *(*[]VoidUnion)(unsafe.Pointer(C.PointerList(s).ToArray()))
 }
@@ -1198,3 +1202,29 @@ func (s RWTestCapn_List) ToArray() []RWTestCapn {
 	return *(*[]RWTestCapn)(unsafe.Pointer(C.PointerList(s).ToArray()))
 }
 func (s RWTestCapn_List) Set(i int, item RWTestCapn) { C.PointerList(s).Set(i, C.Object(item)) }
+
+type ListStructCapn C.Struct
+
+func NewListStructCapn(s *C.Segment) ListStructCapn      { return ListStructCapn(s.NewStruct(0, 1)) }
+func NewRootListStructCapn(s *C.Segment) ListStructCapn  { return ListStructCapn(s.NewRootStruct(0, 1)) }
+func AutoNewListStructCapn(s *C.Segment) ListStructCapn  { return ListStructCapn(s.NewStructAR(0, 1)) }
+func ReadRootListStructCapn(s *C.Segment) ListStructCapn { return ListStructCapn(s.Root(0).ToStruct()) }
+func (s ListStructCapn) Vec() Nester1Capn_List           { return Nester1Capn_List(C.Struct(s).GetObject(0)) }
+func (s ListStructCapn) SetVec(v Nester1Capn_List)       { C.Struct(s).SetObject(0, C.Object(v)) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s ListStructCapn) MarshalJSON() (bs []byte, err error) { return }
+
+type ListStructCapn_List C.PointerList
+
+func NewListStructCapnList(s *C.Segment, sz int) ListStructCapn_List {
+	return ListStructCapn_List(s.NewCompositeList(0, 1, sz))
+}
+func (s ListStructCapn_List) Len() int { return C.PointerList(s).Len() }
+func (s ListStructCapn_List) At(i int) ListStructCapn {
+	return ListStructCapn(C.PointerList(s).At(i).ToStruct())
+}
+func (s ListStructCapn_List) ToArray() []ListStructCapn {
+	return *(*[]ListStructCapn)(unsafe.Pointer(C.PointerList(s).ToArray()))
+}
+func (s ListStructCapn_List) Set(i int, item ListStructCapn) { C.PointerList(s).Set(i, C.Object(item)) }
