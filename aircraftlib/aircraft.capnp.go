@@ -1428,3 +1428,104 @@ func (s ListStructCapn_List) ToArray() []ListStructCapn {
 	return a
 }
 func (s ListStructCapn_List) Set(i int, item ListStructCapn) { C.PointerList(s).Set(i, C.Object(item)) }
+
+type StackingRoot C.Struct
+
+func NewStackingRoot(s *C.Segment) StackingRoot      { return StackingRoot(s.NewStruct(0, 2)) }
+func NewRootStackingRoot(s *C.Segment) StackingRoot  { return StackingRoot(s.NewRootStruct(0, 2)) }
+func AutoNewStackingRoot(s *C.Segment) StackingRoot  { return StackingRoot(s.NewStructAR(0, 2)) }
+func ReadRootStackingRoot(s *C.Segment) StackingRoot { return StackingRoot(s.Root(0).ToStruct()) }
+func (s StackingRoot) A() StackingA                  { return StackingA(C.Struct(s).GetObject(1).ToStruct()) }
+func (s StackingRoot) SetA(v StackingA)              { C.Struct(s).SetObject(1, C.Object(v)) }
+func (s StackingRoot) AWithDefault() StackingA {
+	return StackingA(C.Struct(s).GetObject(0).ToStructDefault(x_832bcc6686a26d56, 0))
+}
+func (s StackingRoot) SetAWithDefault(v StackingA) { C.Struct(s).SetObject(0, C.Object(v)) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s StackingRoot) MarshalJSON() (bs []byte, err error) { return }
+
+type StackingRoot_List C.PointerList
+
+func NewStackingRootList(s *C.Segment, sz int) StackingRoot_List {
+	return StackingRoot_List(s.NewCompositeList(0, 2, sz))
+}
+func (s StackingRoot_List) Len() int { return C.PointerList(s).Len() }
+func (s StackingRoot_List) At(i int) StackingRoot {
+	return StackingRoot(C.PointerList(s).At(i).ToStruct())
+}
+func (s StackingRoot_List) ToArray() []StackingRoot {
+	n := s.Len()
+	a := make([]StackingRoot, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s StackingRoot_List) Set(i int, item StackingRoot) { C.PointerList(s).Set(i, C.Object(item)) }
+
+type StackingA C.Struct
+
+func NewStackingA(s *C.Segment) StackingA      { return StackingA(s.NewStruct(8, 1)) }
+func NewRootStackingA(s *C.Segment) StackingA  { return StackingA(s.NewRootStruct(8, 1)) }
+func AutoNewStackingA(s *C.Segment) StackingA  { return StackingA(s.NewStructAR(8, 1)) }
+func ReadRootStackingA(s *C.Segment) StackingA { return StackingA(s.Root(0).ToStruct()) }
+func (s StackingA) Num() int32                 { return int32(C.Struct(s).Get32(0)) }
+func (s StackingA) SetNum(v int32)             { C.Struct(s).Set32(0, uint32(v)) }
+func (s StackingA) B() StackingB               { return StackingB(C.Struct(s).GetObject(0).ToStruct()) }
+func (s StackingA) SetB(v StackingB)           { C.Struct(s).SetObject(0, C.Object(v)) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s StackingA) MarshalJSON() (bs []byte, err error) { return }
+
+type StackingA_List C.PointerList
+
+func NewStackingAList(s *C.Segment, sz int) StackingA_List {
+	return StackingA_List(s.NewCompositeList(8, 1, sz))
+}
+func (s StackingA_List) Len() int           { return C.PointerList(s).Len() }
+func (s StackingA_List) At(i int) StackingA { return StackingA(C.PointerList(s).At(i).ToStruct()) }
+func (s StackingA_List) ToArray() []StackingA {
+	n := s.Len()
+	a := make([]StackingA, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s StackingA_List) Set(i int, item StackingA) { C.PointerList(s).Set(i, C.Object(item)) }
+
+type StackingB C.Struct
+
+func NewStackingB(s *C.Segment) StackingB      { return StackingB(s.NewStruct(8, 0)) }
+func NewRootStackingB(s *C.Segment) StackingB  { return StackingB(s.NewRootStruct(8, 0)) }
+func AutoNewStackingB(s *C.Segment) StackingB  { return StackingB(s.NewStructAR(8, 0)) }
+func ReadRootStackingB(s *C.Segment) StackingB { return StackingB(s.Root(0).ToStruct()) }
+func (s StackingB) Num() int32                 { return int32(C.Struct(s).Get32(0)) }
+func (s StackingB) SetNum(v int32)             { C.Struct(s).Set32(0, uint32(v)) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s StackingB) MarshalJSON() (bs []byte, err error) { return }
+
+type StackingB_List C.PointerList
+
+func NewStackingBList(s *C.Segment, sz int) StackingB_List {
+	return StackingB_List(s.NewCompositeList(8, 0, sz))
+}
+func (s StackingB_List) Len() int           { return C.PointerList(s).Len() }
+func (s StackingB_List) At(i int) StackingB { return StackingB(C.PointerList(s).At(i).ToStruct()) }
+func (s StackingB_List) ToArray() []StackingB {
+	n := s.Len()
+	a := make([]StackingB, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s StackingB_List) Set(i int, item StackingB) { C.PointerList(s).Set(i, C.Object(item)) }
+
+var x_832bcc6686a26d56 = C.NewBuffer([]byte{
+	0, 0, 0, 0, 1, 0, 1, 0,
+	42, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0,
+})
