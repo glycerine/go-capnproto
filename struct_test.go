@@ -462,3 +462,14 @@ func TestZserverWithOneEmptyJob(t *testing.T) {
 		})
 	})
 }
+
+func TestDefaultStructField(t *testing.T) {
+	cv.Convey("Given a new root StackingRoot", t, func() {
+		cv.Convey("then the aWithDefault field should have a default", func() {
+			seg := capn.NewBuffer(nil)
+			root := air.NewRootStackingRoot(seg)
+
+			cv.So(root.AWithDefault().Num(), cv.ShouldEqual, 42)
+		})
+	})
+}
