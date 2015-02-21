@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	C "github.com/glycerine/go-capnproto"
 	"io"
 	"math"
 	"os"
@@ -11,6 +10,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	C "github.com/glycerine/go-capnproto"
 )
 
 var (
@@ -765,17 +766,22 @@ func writeErrCheck(w io.Writer) {
 
 func (n *node) jsonEnum(w io.Writer) {
 	g_imported["encoding/json"] = true
+	fprintf(w, `str := s.String();`)
+	fprintf(w, `if !JSON_omitempty || len(str) != 0 {`)
 	fprintf(w, `buf, err = json.Marshal(s.String());`)
 	writeErrCheck(w)
 	fprintf(w, "_, err = b.Write(buf);")
 	writeErrCheck(w)
+	fprintf(w, `};`)
 }
 
 // Write statements that will write a json struct
 func (n *node) jsonStruct(w io.Writer) {
+	fprintf(w, `if C.Object(s).HasData() {`)
 	fprintf(w, `err = b.WriteByte('{');`)
 	writeErrCheck(w)
 	for i, f := range n.codeOrderFields() {
+		fprintf(w, f.ifStr())
 		if f.DiscriminantValue() != 0xFFFF {
 			enumname := fmt.Sprintf("%s_%s", strings.ToUpper(n.name), strings.ToUpper(f.Name()))
 			fprintf(w, "if s.Which() == %s {", enumname)
@@ -792,9 +798,29 @@ func (n *node) jsonStruct(w io.Writer) {
 		if f.DiscriminantValue() != 0xFFFF {
 			fprintf(w, "};")
 		}
+		fprintf(w, "};")
 	}
 	fprintf(w, `err = b.WriteByte('}');`)
 	writeErrCheck(w)
+	fprintf(w, "};")
+}
+
+func (f *Field) ifStr() string {
+	condition := "true"
+
+	switch f.Which() {
+	case FIELD_SLOT:
+		switch f.Slot().Type().Which() {
+		case TYPE_STRUCT:
+			condition = fmt.Sprintf("!JSON_omitempty || C.Object(s.%s()).HasData()", title(f.Name()))
+		case TYPE_ENUM:
+			condition = fmt.Sprintf("!JSON_omitempty || len(s.%s().String()) != 0", title(f.Name()))
+		case TYPE_TEXT:
+			condition = fmt.Sprintf("!JSON_omitempty || len(s.%s()) != 0", title(f.Name()))
+		}
+	}
+
+	return fmt.Sprintf("if %s {", condition)
 }
 
 // This function writes statements that write the fields json representation to the bufio.
