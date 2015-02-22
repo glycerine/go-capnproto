@@ -3,10 +3,8 @@ package main
 // AUTO GENERATED - DO NOT EDIT
 
 import (
-	"math"
-	"unsafe"
-
 	C "github.com/glycerine/go-capnproto"
+	"math"
 )
 
 type Node C.Struct
@@ -19,15 +17,16 @@ type Node_Which uint16
 
 const (
 	NODE_FILE       Node_Which = 0
-	NODE_STRUCT                = 1
-	NODE_ENUM                  = 2
-	NODE_INTERFACE             = 3
-	NODE_CONST                 = 4
-	NODE_ANNOTATION            = 5
+	NODE_STRUCT     Node_Which = 1
+	NODE_ENUM       Node_Which = 2
+	NODE_INTERFACE  Node_Which = 3
+	NODE_CONST      Node_Which = 4
+	NODE_ANNOTATION Node_Which = 5
 )
 
 func NewNode(s *C.Segment) Node                             { return Node(s.NewStruct(40, 5)) }
 func NewRootNode(s *C.Segment) Node                         { return Node(s.NewRootStruct(40, 5)) }
+func AutoNewNode(s *C.Segment) Node                         { return Node(s.NewStructAR(40, 5)) }
 func ReadRootNode(s *C.Segment) Node                        { return Node(s.Root(0).ToStruct()) }
 func (s Node) Which() Node_Which                            { return Node_Which(C.Struct(s).Get16(12)) }
 func (s Node) Id() uint64                                   { return C.Struct(s).Get64(0) }
@@ -42,6 +41,7 @@ func (s Node) NestedNodes() NodeNestedNode_List             { return NodeNestedN
 func (s Node) SetNestedNodes(v NodeNestedNode_List)         { C.Struct(s).SetObject(1, C.Object(v)) }
 func (s Node) Annotations() Annotation_List                 { return Annotation_List(C.Struct(s).GetObject(2)) }
 func (s Node) SetAnnotations(v Annotation_List)             { C.Struct(s).SetObject(2, C.Object(v)) }
+func (s Node) SetFile()                                     { C.Struct(s).Set16(12, 0) }
 func (s Node) Struct() NodeStruct                           { return NodeStruct(s) }
 func (s Node) SetStruct()                                   { C.Struct(s).Set16(12, 1) }
 func (s NodeStruct) DataWordCount() uint16                  { return C.Struct(s).Get16(14) }
@@ -101,22 +101,37 @@ func (s NodeAnnotation) SetTargetsParam(v bool)             { C.Struct(s).Set1(1
 func (s NodeAnnotation) TargetsAnnotation() bool            { return C.Struct(s).Get1(123) }
 func (s NodeAnnotation) SetTargetsAnnotation(v bool)        { C.Struct(s).Set1(123, v) }
 
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s Node) MarshalJSON() (bs []byte, err error) { return }
+
 type Node_List C.PointerList
 
 func NewNodeList(s *C.Segment, sz int) Node_List { return Node_List(s.NewCompositeList(40, 5, sz)) }
 func (s Node_List) Len() int                     { return C.PointerList(s).Len() }
 func (s Node_List) At(i int) Node                { return Node(C.PointerList(s).At(i).ToStruct()) }
-func (s Node_List) ToArray() []Node              { return *(*[]Node)(unsafe.Pointer(C.PointerList(s).ToArray())) }
+func (s Node_List) ToArray() []Node {
+	n := s.Len()
+	a := make([]Node, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s Node_List) Set(i int, item Node) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type NodeNestedNode C.Struct
 
 func NewNodeNestedNode(s *C.Segment) NodeNestedNode      { return NodeNestedNode(s.NewStruct(8, 1)) }
 func NewRootNodeNestedNode(s *C.Segment) NodeNestedNode  { return NodeNestedNode(s.NewRootStruct(8, 1)) }
+func AutoNewNodeNestedNode(s *C.Segment) NodeNestedNode  { return NodeNestedNode(s.NewStructAR(8, 1)) }
 func ReadRootNodeNestedNode(s *C.Segment) NodeNestedNode { return NodeNestedNode(s.Root(0).ToStruct()) }
 func (s NodeNestedNode) Name() string                    { return C.Struct(s).GetObject(0).ToText() }
 func (s NodeNestedNode) SetName(v string)                { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s NodeNestedNode) Id() uint64                      { return C.Struct(s).Get64(0) }
 func (s NodeNestedNode) SetId(v uint64)                  { C.Struct(s).Set64(0, v) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s NodeNestedNode) MarshalJSON() (bs []byte, err error) { return }
 
 type NodeNestedNode_List C.PointerList
 
@@ -128,8 +143,14 @@ func (s NodeNestedNode_List) At(i int) NodeNestedNode {
 	return NodeNestedNode(C.PointerList(s).At(i).ToStruct())
 }
 func (s NodeNestedNode_List) ToArray() []NodeNestedNode {
-	return *(*[]NodeNestedNode)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]NodeNestedNode, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
 }
+func (s NodeNestedNode_List) Set(i int, item NodeNestedNode) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type Field C.Struct
 type FieldSlot Field
@@ -139,18 +160,19 @@ type Field_Which uint16
 
 const (
 	FIELD_SLOT  Field_Which = 0
-	FIELD_GROUP             = 1
+	FIELD_GROUP Field_Which = 1
 )
 
 type FieldOrdinal_Which uint16
 
 const (
 	FIELDORDINAL_IMPLICIT FieldOrdinal_Which = 0
-	FIELDORDINAL_EXPLICIT                    = 1
+	FIELDORDINAL_EXPLICIT FieldOrdinal_Which = 1
 )
 
 func NewField(s *C.Segment) Field                { return Field(s.NewStruct(24, 4)) }
 func NewRootField(s *C.Segment) Field            { return Field(s.NewRootStruct(24, 4)) }
+func AutoNewField(s *C.Segment) Field            { return Field(s.NewStructAR(24, 4)) }
 func ReadRootField(s *C.Segment) Field           { return Field(s.Root(0).ToStruct()) }
 func (s Field) Which() Field_Which               { return Field_Which(C.Struct(s).Get16(8)) }
 func (s Field) Name() string                     { return C.Struct(s).GetObject(0).ToText() }
@@ -175,20 +197,33 @@ func (s FieldGroup) TypeId() uint64              { return C.Struct(s).Get64(16) 
 func (s FieldGroup) SetTypeId(v uint64)          { C.Struct(s).Set64(16, v) }
 func (s Field) Ordinal() FieldOrdinal            { return FieldOrdinal(s) }
 func (s FieldOrdinal) Which() FieldOrdinal_Which { return FieldOrdinal_Which(C.Struct(s).Get16(10)) }
+func (s FieldOrdinal) SetImplicit()              { C.Struct(s).Set16(10, 0) }
 func (s FieldOrdinal) Explicit() uint16          { return C.Struct(s).Get16(12) }
 func (s FieldOrdinal) SetExplicit(v uint16)      { C.Struct(s).Set16(10, 1); C.Struct(s).Set16(12, v) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s Field) MarshalJSON() (bs []byte, err error) { return }
 
 type Field_List C.PointerList
 
 func NewFieldList(s *C.Segment, sz int) Field_List { return Field_List(s.NewCompositeList(24, 4, sz)) }
 func (s Field_List) Len() int                      { return C.PointerList(s).Len() }
 func (s Field_List) At(i int) Field                { return Field(C.PointerList(s).At(i).ToStruct()) }
-func (s Field_List) ToArray() []Field              { return *(*[]Field)(unsafe.Pointer(C.PointerList(s).ToArray())) }
+func (s Field_List) ToArray() []Field {
+	n := s.Len()
+	a := make([]Field, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s Field_List) Set(i int, item Field) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type Enumerant C.Struct
 
 func NewEnumerant(s *C.Segment) Enumerant            { return Enumerant(s.NewStruct(8, 2)) }
 func NewRootEnumerant(s *C.Segment) Enumerant        { return Enumerant(s.NewRootStruct(8, 2)) }
+func AutoNewEnumerant(s *C.Segment) Enumerant        { return Enumerant(s.NewStructAR(8, 2)) }
 func ReadRootEnumerant(s *C.Segment) Enumerant       { return Enumerant(s.Root(0).ToStruct()) }
 func (s Enumerant) Name() string                     { return C.Struct(s).GetObject(0).ToText() }
 func (s Enumerant) SetName(v string)                 { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
@@ -196,6 +231,9 @@ func (s Enumerant) CodeOrder() uint16                { return C.Struct(s).Get16(
 func (s Enumerant) SetCodeOrder(v uint16)            { C.Struct(s).Set16(0, v) }
 func (s Enumerant) Annotations() Annotation_List     { return Annotation_List(C.Struct(s).GetObject(1)) }
 func (s Enumerant) SetAnnotations(v Annotation_List) { C.Struct(s).SetObject(1, C.Object(v)) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s Enumerant) MarshalJSON() (bs []byte, err error) { return }
 
 type Enumerant_List C.PointerList
 
@@ -205,13 +243,20 @@ func NewEnumerantList(s *C.Segment, sz int) Enumerant_List {
 func (s Enumerant_List) Len() int           { return C.PointerList(s).Len() }
 func (s Enumerant_List) At(i int) Enumerant { return Enumerant(C.PointerList(s).At(i).ToStruct()) }
 func (s Enumerant_List) ToArray() []Enumerant {
-	return *(*[]Enumerant)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]Enumerant, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
 }
+func (s Enumerant_List) Set(i int, item Enumerant) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type Method C.Struct
 
 func NewMethod(s *C.Segment) Method               { return Method(s.NewStruct(8, 4)) }
 func NewRootMethod(s *C.Segment) Method           { return Method(s.NewRootStruct(8, 4)) }
+func AutoNewMethod(s *C.Segment) Method           { return Method(s.NewStructAR(8, 4)) }
 func ReadRootMethod(s *C.Segment) Method          { return Method(s.Root(0).ToStruct()) }
 func (s Method) Name() string                     { return C.Struct(s).GetObject(0).ToText() }
 func (s Method) SetName(v string)                 { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
@@ -226,19 +271,29 @@ func (s Method) SetReturnType(v Type)             { C.Struct(s).SetObject(2, C.O
 func (s Method) Annotations() Annotation_List     { return Annotation_List(C.Struct(s).GetObject(3)) }
 func (s Method) SetAnnotations(v Annotation_List) { C.Struct(s).SetObject(3, C.Object(v)) }
 
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s Method) MarshalJSON() (bs []byte, err error) { return }
+
 type Method_List C.PointerList
 
 func NewMethodList(s *C.Segment, sz int) Method_List { return Method_List(s.NewCompositeList(8, 4, sz)) }
 func (s Method_List) Len() int                       { return C.PointerList(s).Len() }
 func (s Method_List) At(i int) Method                { return Method(C.PointerList(s).At(i).ToStruct()) }
 func (s Method_List) ToArray() []Method {
-	return *(*[]Method)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]Method, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
 }
+func (s Method_List) Set(i int, item Method) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type MethodParam C.Struct
 
 func NewMethodParam(s *C.Segment) MethodParam          { return MethodParam(s.NewStruct(0, 4)) }
 func NewRootMethodParam(s *C.Segment) MethodParam      { return MethodParam(s.NewRootStruct(0, 4)) }
+func AutoNewMethodParam(s *C.Segment) MethodParam      { return MethodParam(s.NewStructAR(0, 4)) }
 func ReadRootMethodParam(s *C.Segment) MethodParam     { return MethodParam(s.Root(0).ToStruct()) }
 func (s MethodParam) Name() string                     { return C.Struct(s).GetObject(0).ToText() }
 func (s MethodParam) SetName(v string)                 { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
@@ -249,6 +304,9 @@ func (s MethodParam) SetDefaultValue(v Value)          { C.Struct(s).SetObject(2
 func (s MethodParam) Annotations() Annotation_List     { return Annotation_List(C.Struct(s).GetObject(3)) }
 func (s MethodParam) SetAnnotations(v Annotation_List) { C.Struct(s).SetObject(3, C.Object(v)) }
 
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s MethodParam) MarshalJSON() (bs []byte, err error) { return }
+
 type MethodParam_List C.PointerList
 
 func NewMethodParamList(s *C.Segment, sz int) MethodParam_List {
@@ -257,8 +315,14 @@ func NewMethodParamList(s *C.Segment, sz int) MethodParam_List {
 func (s MethodParam_List) Len() int             { return C.PointerList(s).Len() }
 func (s MethodParam_List) At(i int) MethodParam { return MethodParam(C.PointerList(s).At(i).ToStruct()) }
 func (s MethodParam_List) ToArray() []MethodParam {
-	return *(*[]MethodParam)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]MethodParam, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
 }
+func (s MethodParam_List) Set(i int, item MethodParam) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type Type C.Struct
 type TypeList Type
@@ -269,30 +333,45 @@ type Type_Which uint16
 
 const (
 	TYPE_VOID      Type_Which = 0
-	TYPE_BOOL                 = 1
-	TYPE_INT8                 = 2
-	TYPE_INT16                = 3
-	TYPE_INT32                = 4
-	TYPE_INT64                = 5
-	TYPE_UINT8                = 6
-	TYPE_UINT16               = 7
-	TYPE_UINT32               = 8
-	TYPE_UINT64               = 9
-	TYPE_FLOAT32              = 10
-	TYPE_FLOAT64              = 11
-	TYPE_TEXT                 = 12
-	TYPE_DATA                 = 13
-	TYPE_LIST                 = 14
-	TYPE_ENUM                 = 15
-	TYPE_STRUCT               = 16
-	TYPE_INTERFACE            = 17
-	TYPE_OBJECT               = 18
+	TYPE_BOOL      Type_Which = 1
+	TYPE_INT8      Type_Which = 2
+	TYPE_INT16     Type_Which = 3
+	TYPE_INT32     Type_Which = 4
+	TYPE_INT64     Type_Which = 5
+	TYPE_UINT8     Type_Which = 6
+	TYPE_UINT16    Type_Which = 7
+	TYPE_UINT32    Type_Which = 8
+	TYPE_UINT64    Type_Which = 9
+	TYPE_FLOAT32   Type_Which = 10
+	TYPE_FLOAT64   Type_Which = 11
+	TYPE_TEXT      Type_Which = 12
+	TYPE_DATA      Type_Which = 13
+	TYPE_LIST      Type_Which = 14
+	TYPE_ENUM      Type_Which = 15
+	TYPE_STRUCT    Type_Which = 16
+	TYPE_INTERFACE Type_Which = 17
+	TYPE_OBJECT    Type_Which = 18
 )
 
 func NewType(s *C.Segment) Type            { return Type(s.NewStruct(16, 1)) }
 func NewRootType(s *C.Segment) Type        { return Type(s.NewRootStruct(16, 1)) }
+func AutoNewType(s *C.Segment) Type        { return Type(s.NewStructAR(16, 1)) }
 func ReadRootType(s *C.Segment) Type       { return Type(s.Root(0).ToStruct()) }
 func (s Type) Which() Type_Which           { return Type_Which(C.Struct(s).Get16(0)) }
+func (s Type) SetVoid()                    { C.Struct(s).Set16(0, 0) }
+func (s Type) SetBool()                    { C.Struct(s).Set16(0, 1) }
+func (s Type) SetInt8()                    { C.Struct(s).Set16(0, 2) }
+func (s Type) SetInt16()                   { C.Struct(s).Set16(0, 3) }
+func (s Type) SetInt32()                   { C.Struct(s).Set16(0, 4) }
+func (s Type) SetInt64()                   { C.Struct(s).Set16(0, 5) }
+func (s Type) SetUint8()                   { C.Struct(s).Set16(0, 6) }
+func (s Type) SetUint16()                  { C.Struct(s).Set16(0, 7) }
+func (s Type) SetUint32()                  { C.Struct(s).Set16(0, 8) }
+func (s Type) SetUint64()                  { C.Struct(s).Set16(0, 9) }
+func (s Type) SetFloat32()                 { C.Struct(s).Set16(0, 10) }
+func (s Type) SetFloat64()                 { C.Struct(s).Set16(0, 11) }
+func (s Type) SetText()                    { C.Struct(s).Set16(0, 12) }
+func (s Type) SetData()                    { C.Struct(s).Set16(0, 13) }
 func (s Type) List() TypeList              { return TypeList(s) }
 func (s Type) SetList()                    { C.Struct(s).Set16(0, 14) }
 func (s TypeList) ElementType() Type       { return Type(C.Struct(s).GetObject(0).ToStruct()) }
@@ -309,43 +388,57 @@ func (s Type) Interface() TypeInterface    { return TypeInterface(s) }
 func (s Type) SetInterface()               { C.Struct(s).Set16(0, 17) }
 func (s TypeInterface) TypeId() uint64     { return C.Struct(s).Get64(8) }
 func (s TypeInterface) SetTypeId(v uint64) { C.Struct(s).Set64(8, v) }
+func (s Type) SetObject()                  { C.Struct(s).Set16(0, 18) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s Type) MarshalJSON() (bs []byte, err error) { return }
 
 type Type_List C.PointerList
 
 func NewTypeList(s *C.Segment, sz int) Type_List { return Type_List(s.NewCompositeList(16, 1, sz)) }
 func (s Type_List) Len() int                     { return C.PointerList(s).Len() }
 func (s Type_List) At(i int) Type                { return Type(C.PointerList(s).At(i).ToStruct()) }
-func (s Type_List) ToArray() []Type              { return *(*[]Type)(unsafe.Pointer(C.PointerList(s).ToArray())) }
+func (s Type_List) ToArray() []Type {
+	n := s.Len()
+	a := make([]Type, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s Type_List) Set(i int, item Type) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type Value C.Struct
 type Value_Which uint16
 
 const (
 	VALUE_VOID      Value_Which = 0
-	VALUE_BOOL                  = 1
-	VALUE_INT8                  = 2
-	VALUE_INT16                 = 3
-	VALUE_INT32                 = 4
-	VALUE_INT64                 = 5
-	VALUE_UINT8                 = 6
-	VALUE_UINT16                = 7
-	VALUE_UINT32                = 8
-	VALUE_UINT64                = 9
-	VALUE_FLOAT32               = 10
-	VALUE_FLOAT64               = 11
-	VALUE_TEXT                  = 12
-	VALUE_DATA                  = 13
-	VALUE_LIST                  = 14
-	VALUE_ENUM                  = 15
-	VALUE_STRUCT                = 16
-	VALUE_INTERFACE             = 17
-	VALUE_OBJECT                = 18
+	VALUE_BOOL      Value_Which = 1
+	VALUE_INT8      Value_Which = 2
+	VALUE_INT16     Value_Which = 3
+	VALUE_INT32     Value_Which = 4
+	VALUE_INT64     Value_Which = 5
+	VALUE_UINT8     Value_Which = 6
+	VALUE_UINT16    Value_Which = 7
+	VALUE_UINT32    Value_Which = 8
+	VALUE_UINT64    Value_Which = 9
+	VALUE_FLOAT32   Value_Which = 10
+	VALUE_FLOAT64   Value_Which = 11
+	VALUE_TEXT      Value_Which = 12
+	VALUE_DATA      Value_Which = 13
+	VALUE_LIST      Value_Which = 14
+	VALUE_ENUM      Value_Which = 15
+	VALUE_STRUCT    Value_Which = 16
+	VALUE_INTERFACE Value_Which = 17
+	VALUE_OBJECT    Value_Which = 18
 )
 
 func NewValue(s *C.Segment) Value      { return Value(s.NewStruct(16, 1)) }
 func NewRootValue(s *C.Segment) Value  { return Value(s.NewRootStruct(16, 1)) }
+func AutoNewValue(s *C.Segment) Value  { return Value(s.NewStructAR(16, 1)) }
 func ReadRootValue(s *C.Segment) Value { return Value(s.Root(0).ToStruct()) }
 func (s Value) Which() Value_Which     { return Value_Which(C.Struct(s).Get16(0)) }
+func (s Value) SetVoid()               { C.Struct(s).Set16(0, 0) }
 func (s Value) Bool() bool             { return C.Struct(s).Get1(16) }
 func (s Value) SetBool(v bool)         { C.Struct(s).Set16(0, 1); C.Struct(s).Set1(16, v) }
 func (s Value) Int8() int8             { return int8(C.Struct(s).Get8(2)) }
@@ -390,25 +483,41 @@ func (s Value) Enum() uint16         { return C.Struct(s).Get16(2) }
 func (s Value) SetEnum(v uint16)     { C.Struct(s).Set16(0, 15); C.Struct(s).Set16(2, v) }
 func (s Value) Struct() C.Object     { return C.Struct(s).GetObject(0) }
 func (s Value) SetStruct(v C.Object) { C.Struct(s).Set16(0, 16); C.Struct(s).SetObject(0, v) }
+func (s Value) SetInterface()        { C.Struct(s).Set16(0, 17) }
 func (s Value) Object() C.Object     { return C.Struct(s).GetObject(0) }
 func (s Value) SetObject(v C.Object) { C.Struct(s).Set16(0, 18); C.Struct(s).SetObject(0, v) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s Value) MarshalJSON() (bs []byte, err error) { return }
 
 type Value_List C.PointerList
 
 func NewValueList(s *C.Segment, sz int) Value_List { return Value_List(s.NewCompositeList(16, 1, sz)) }
 func (s Value_List) Len() int                      { return C.PointerList(s).Len() }
 func (s Value_List) At(i int) Value                { return Value(C.PointerList(s).At(i).ToStruct()) }
-func (s Value_List) ToArray() []Value              { return *(*[]Value)(unsafe.Pointer(C.PointerList(s).ToArray())) }
+func (s Value_List) ToArray() []Value {
+	n := s.Len()
+	a := make([]Value, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s Value_List) Set(i int, item Value) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type Annotation C.Struct
 
 func NewAnnotation(s *C.Segment) Annotation      { return Annotation(s.NewStruct(8, 1)) }
 func NewRootAnnotation(s *C.Segment) Annotation  { return Annotation(s.NewRootStruct(8, 1)) }
+func AutoNewAnnotation(s *C.Segment) Annotation  { return Annotation(s.NewStructAR(8, 1)) }
 func ReadRootAnnotation(s *C.Segment) Annotation { return Annotation(s.Root(0).ToStruct()) }
 func (s Annotation) Id() uint64                  { return C.Struct(s).Get64(0) }
 func (s Annotation) SetId(v uint64)              { C.Struct(s).Set64(0, v) }
 func (s Annotation) Value() Value                { return Value(C.Struct(s).GetObject(0).ToStruct()) }
 func (s Annotation) SetValue(v Value)            { C.Struct(s).SetObject(0, C.Object(v)) }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s Annotation) MarshalJSON() (bs []byte, err error) { return }
 
 type Annotation_List C.PointerList
 
@@ -418,21 +527,73 @@ func NewAnnotationList(s *C.Segment, sz int) Annotation_List {
 func (s Annotation_List) Len() int            { return C.PointerList(s).Len() }
 func (s Annotation_List) At(i int) Annotation { return Annotation(C.PointerList(s).At(i).ToStruct()) }
 func (s Annotation_List) ToArray() []Annotation {
-	return *(*[]Annotation)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]Annotation, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
 }
+func (s Annotation_List) Set(i int, item Annotation) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type ElementSize uint16
 
 const (
 	ELEMENTSIZE_EMPTY           ElementSize = 0
-	ELEMENTSIZE_BIT                         = 1
-	ELEMENTSIZE_BYTE                        = 2
-	ELEMENTSIZE_TWOBYTES                    = 3
-	ELEMENTSIZE_FOURBYTES                   = 4
-	ELEMENTSIZE_EIGHTBYTES                  = 5
-	ELEMENTSIZE_POINTER                     = 6
-	ELEMENTSIZE_INLINECOMPOSITE             = 7
+	ELEMENTSIZE_BIT             ElementSize = 1
+	ELEMENTSIZE_BYTE            ElementSize = 2
+	ELEMENTSIZE_TWOBYTES        ElementSize = 3
+	ELEMENTSIZE_FOURBYTES       ElementSize = 4
+	ELEMENTSIZE_EIGHTBYTES      ElementSize = 5
+	ELEMENTSIZE_POINTER         ElementSize = 6
+	ELEMENTSIZE_INLINECOMPOSITE ElementSize = 7
 )
+
+func (c ElementSize) String() string {
+	switch c {
+	case ELEMENTSIZE_EMPTY:
+		return "empty"
+	case ELEMENTSIZE_BIT:
+		return "bit"
+	case ELEMENTSIZE_BYTE:
+		return "byte"
+	case ELEMENTSIZE_TWOBYTES:
+		return "twoBytes"
+	case ELEMENTSIZE_FOURBYTES:
+		return "fourBytes"
+	case ELEMENTSIZE_EIGHTBYTES:
+		return "eightBytes"
+	case ELEMENTSIZE_POINTER:
+		return "pointer"
+	case ELEMENTSIZE_INLINECOMPOSITE:
+		return "inlineComposite"
+	default:
+		return ""
+	}
+}
+
+func ElementSizeFromString(c string) ElementSize {
+	switch c {
+	case "empty":
+		return ELEMENTSIZE_EMPTY
+	case "bit":
+		return ELEMENTSIZE_BIT
+	case "byte":
+		return ELEMENTSIZE_BYTE
+	case "twoBytes":
+		return ELEMENTSIZE_TWOBYTES
+	case "fourBytes":
+		return ELEMENTSIZE_FOURBYTES
+	case "eightBytes":
+		return ELEMENTSIZE_EIGHTBYTES
+	case "pointer":
+		return ELEMENTSIZE_POINTER
+	case "inlineComposite":
+		return ELEMENTSIZE_INLINECOMPOSITE
+	default:
+		return 0
+	}
+}
 
 type ElementSize_List C.PointerList
 
@@ -442,8 +603,16 @@ func NewElementSizeList(s *C.Segment, sz int) ElementSize_List {
 func (s ElementSize_List) Len() int             { return C.UInt16List(s).Len() }
 func (s ElementSize_List) At(i int) ElementSize { return ElementSize(C.UInt16List(s).At(i)) }
 func (s ElementSize_List) ToArray() []ElementSize {
-	return *(*[]ElementSize)(unsafe.Pointer(C.UInt16List(s).ToEnumArray()))
+	n := s.Len()
+	a := make([]ElementSize, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
 }
+
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s ElementSize) MarshalJSON() (bs []byte, err error) { return }
 
 type CodeGeneratorRequest C.Struct
 
@@ -452,6 +621,9 @@ func NewCodeGeneratorRequest(s *C.Segment) CodeGeneratorRequest {
 }
 func NewRootCodeGeneratorRequest(s *C.Segment) CodeGeneratorRequest {
 	return CodeGeneratorRequest(s.NewRootStruct(0, 2))
+}
+func AutoNewCodeGeneratorRequest(s *C.Segment) CodeGeneratorRequest {
+	return CodeGeneratorRequest(s.NewStructAR(0, 2))
 }
 func ReadRootCodeGeneratorRequest(s *C.Segment) CodeGeneratorRequest {
 	return CodeGeneratorRequest(s.Root(0).ToStruct())
@@ -465,6 +637,9 @@ func (s CodeGeneratorRequest) SetRequestedFiles(v CodeGeneratorRequestRequestedF
 	C.Struct(s).SetObject(1, C.Object(v))
 }
 
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s CodeGeneratorRequest) MarshalJSON() (bs []byte, err error) { return }
+
 type CodeGeneratorRequest_List C.PointerList
 
 func NewCodeGeneratorRequestList(s *C.Segment, sz int) CodeGeneratorRequest_List {
@@ -475,7 +650,15 @@ func (s CodeGeneratorRequest_List) At(i int) CodeGeneratorRequest {
 	return CodeGeneratorRequest(C.PointerList(s).At(i).ToStruct())
 }
 func (s CodeGeneratorRequest_List) ToArray() []CodeGeneratorRequest {
-	return *(*[]CodeGeneratorRequest)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]CodeGeneratorRequest, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s CodeGeneratorRequest_List) Set(i int, item CodeGeneratorRequest) {
+	C.PointerList(s).Set(i, C.Object(item))
 }
 
 type CodeGeneratorRequestRequestedFile C.Struct
@@ -485,6 +668,9 @@ func NewCodeGeneratorRequestRequestedFile(s *C.Segment) CodeGeneratorRequestRequ
 }
 func NewRootCodeGeneratorRequestRequestedFile(s *C.Segment) CodeGeneratorRequestRequestedFile {
 	return CodeGeneratorRequestRequestedFile(s.NewRootStruct(8, 2))
+}
+func AutoNewCodeGeneratorRequestRequestedFile(s *C.Segment) CodeGeneratorRequestRequestedFile {
+	return CodeGeneratorRequestRequestedFile(s.NewStructAR(8, 2))
 }
 func ReadRootCodeGeneratorRequestRequestedFile(s *C.Segment) CodeGeneratorRequestRequestedFile {
 	return CodeGeneratorRequestRequestedFile(s.Root(0).ToStruct())
@@ -502,6 +688,9 @@ func (s CodeGeneratorRequestRequestedFile) SetImports(v CodeGeneratorRequestRequ
 	C.Struct(s).SetObject(1, C.Object(v))
 }
 
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s CodeGeneratorRequestRequestedFile) MarshalJSON() (bs []byte, err error) { return }
+
 type CodeGeneratorRequestRequestedFile_List C.PointerList
 
 func NewCodeGeneratorRequestRequestedFileList(s *C.Segment, sz int) CodeGeneratorRequestRequestedFile_List {
@@ -512,7 +701,15 @@ func (s CodeGeneratorRequestRequestedFile_List) At(i int) CodeGeneratorRequestRe
 	return CodeGeneratorRequestRequestedFile(C.PointerList(s).At(i).ToStruct())
 }
 func (s CodeGeneratorRequestRequestedFile_List) ToArray() []CodeGeneratorRequestRequestedFile {
-	return *(*[]CodeGeneratorRequestRequestedFile)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]CodeGeneratorRequestRequestedFile, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s CodeGeneratorRequestRequestedFile_List) Set(i int, item CodeGeneratorRequestRequestedFile) {
+	C.PointerList(s).Set(i, C.Object(item))
 }
 
 type CodeGeneratorRequestRequestedFileImport C.Struct
@@ -522,6 +719,9 @@ func NewCodeGeneratorRequestRequestedFileImport(s *C.Segment) CodeGeneratorReque
 }
 func NewRootCodeGeneratorRequestRequestedFileImport(s *C.Segment) CodeGeneratorRequestRequestedFileImport {
 	return CodeGeneratorRequestRequestedFileImport(s.NewRootStruct(8, 1))
+}
+func AutoNewCodeGeneratorRequestRequestedFileImport(s *C.Segment) CodeGeneratorRequestRequestedFileImport {
+	return CodeGeneratorRequestRequestedFileImport(s.NewStructAR(8, 1))
 }
 func ReadRootCodeGeneratorRequestRequestedFileImport(s *C.Segment) CodeGeneratorRequestRequestedFileImport {
 	return CodeGeneratorRequestRequestedFileImport(s.Root(0).ToStruct())
@@ -535,6 +735,9 @@ func (s CodeGeneratorRequestRequestedFileImport) SetName(v string) {
 	C.Struct(s).SetObject(0, s.Segment.NewText(v))
 }
 
+// capn.JSON_enabled == false so we stub MarshallJSON().
+func (s CodeGeneratorRequestRequestedFileImport) MarshalJSON() (bs []byte, err error) { return }
+
 type CodeGeneratorRequestRequestedFileImport_List C.PointerList
 
 func NewCodeGeneratorRequestRequestedFileImportList(s *C.Segment, sz int) CodeGeneratorRequestRequestedFileImport_List {
@@ -545,5 +748,13 @@ func (s CodeGeneratorRequestRequestedFileImport_List) At(i int) CodeGeneratorReq
 	return CodeGeneratorRequestRequestedFileImport(C.PointerList(s).At(i).ToStruct())
 }
 func (s CodeGeneratorRequestRequestedFileImport_List) ToArray() []CodeGeneratorRequestRequestedFileImport {
-	return *(*[]CodeGeneratorRequestRequestedFileImport)(unsafe.Pointer(C.PointerList(s).ToArray()))
+	n := s.Len()
+	a := make([]CodeGeneratorRequestRequestedFileImport, n)
+	for i := 0; i < n; i++ {
+		a[i] = s.At(i)
+	}
+	return a
+}
+func (s CodeGeneratorRequestRequestedFileImport_List) Set(i int, item CodeGeneratorRequestRequestedFileImport) {
+	C.PointerList(s).Set(i, C.Object(item))
 }

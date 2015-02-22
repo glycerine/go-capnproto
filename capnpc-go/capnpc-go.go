@@ -192,9 +192,11 @@ func (n *node) defineEnum(w io.Writer) {
 	fprintf(w, "func New%sList(s *C.Segment, sz int) %s_List { return %s_List(s.NewUInt16List(sz)) }\n", n.name, n.name, n.name)
 	fprintf(w, "func (s %s_List) Len() int { return C.UInt16List(s).Len() }\n", n.name)
 	fprintf(w, "func (s %s_List) At(i int) %s { return %s(C.UInt16List(s).At(i)) }\n", n.name, n.name, n.name)
-	fprintf(w, "func (s %s_List) ToArray() []%s { return *(*[]%s)(unsafe.Pointer(C.UInt16List(s).ToEnumArray())) }\n", n.name, n.name, n.name)
-
-	g_imported["unsafe"] = true
+	fprintf(w, "func (s %s_List) ToArray() []%s {\n", n.name, n.name)
+	fprintf(w, "\tn := s.Len()\n")
+	fprintf(w, "\ta := make([]%s, n)\n", n.name)
+	fprintf(w, "\tfor i := 0; i < n; i++ { a[i] = s.At(i) }\n")
+	fprintf(w, "\treturn a\n}\n")
 }
 
 func (n *node) writeValue(w io.Writer, t Type, v Value) {
@@ -936,10 +938,12 @@ func (n *node) defineStructList(w io.Writer) {
 
 	fprintf(w, "func (s %s_List) Len() int { return C.PointerList(s).Len() }\n", n.name)
 	fprintf(w, "func (s %s_List) At(i int) %s { return %s(C.PointerList(s).At(i).ToStruct()) }\n", n.name, n.name, n.name)
-	fprintf(w, "func (s %s_List) ToArray() []%s { return *(*[]%s)(unsafe.Pointer(C.PointerList(s).ToArray())) }\n", n.name, n.name, n.name)
+	fprintf(w, "func (s %s_List) ToArray() []%s {\n", n.name, n.name)
+	fprintf(w, "\tn := s.Len()\n")
+	fprintf(w, "\ta := make([]%s, n)\n", n.name)
+	fprintf(w, "\tfor i := 0; i < n; i++ { a[i] = s.At(i) }\n")
+	fprintf(w, "\treturn a\n}\n")
 	fprintf(w, "func (s %s_List) Set(i int, item %s) { C.PointerList(s).Set(i, C.Object(item)) }\n", n.name, n.name)
-
-	g_imported["unsafe"] = true
 }
 
 func main() {
