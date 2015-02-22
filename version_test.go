@@ -21,13 +21,12 @@ func TestV0ListofEmptyShouldMatchCapnp(t *testing.T) {
 			scratch := capn.NewBuffer(nil)
 			holder := air.NewRootHoldsVerEmptyList(seg)
 
-			emptyBytes := ShowSeg("          after NewRootHoldsVerEmptyList(seg), segment seg is:", seg)
+			ShowSeg("          after NewRootHoldsVerEmptyList(seg), segment seg is:", seg)
 
 			elist := air.NewVerEmptyList(seg, 2)
 			plist := capn.PointerList(elist)
 
-			addList2bytes := ShowSeg("          pre NewVerEmpty(scratch), segment seg is:", seg)
-			cv.So(emptyBytes, cv.ShouldResemble, addList2bytes)
+			ShowSeg("          pre NewVerEmpty(scratch), segment seg is:", seg)
 
 			e0 := air.NewVerEmpty(scratch)
 			e1 := air.NewVerEmpty(scratch)
