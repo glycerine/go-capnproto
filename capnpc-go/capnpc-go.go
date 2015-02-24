@@ -72,6 +72,9 @@ func (n *node) remoteName(from *node) string {
 }
 
 func (n *node) resolveName(base, name string, file *node) {
+	if na := nameAnnotation(n.Annotations()); na != "" {
+		name = na
+	}
 	if base != "" {
 		n.name = base + title(name)
 	} else {
@@ -94,21 +97,37 @@ func (n *node) resolveName(base, name string, file *node) {
 	if n.Which() == NODE_STRUCT {
 		for _, f := range n.Struct().Fields().ToArray() {
 			if f.Which() == FIELD_GROUP {
-				findNode(f.Group().TypeId()).resolveName(n.name, f.Name(), file)
+				gname := f.Name()
+				if na := nameAnnotation(f.Annotations()); na != "" {
+					gname = na
+				}
+				findNode(f.Group().TypeId()).resolveName(n.name, gname, file)
 			}
 		}
 	}
 }
 
+func nameAnnotation(annotations Annotation_List) string {
+	for _, a := range annotations.ToArray() {
+		if a.Id() == C.Name {
+			if name := a.Value().Text(); name != "" {
+				return name
+			}
+		}
+	}
+	return ""
+}
+
 type enumval struct {
 	Enumerant
 	val    int
+	name   string
 	tag    string
 	parent *node
 }
 
 func (e *enumval) fullName() string {
-	return fmt.Sprintf("%s_%s", strings.ToUpper(e.parent.name), strings.ToUpper(e.Name()))
+	return fmt.Sprintf("%s_%s", strings.ToUpper(e.parent.name), strings.ToUpper(e.name))
 }
 
 func (n *node) defineEnum(w io.Writer) {
@@ -125,8 +144,12 @@ func (n *node) defineEnum(w io.Writer) {
 		ev := make([]enumval, es.Len())
 		for i := 0; i < es.Len(); i++ {
 			e := es.At(i)
+			ename := e.Name()
+			if an := nameAnnotation(e.Annotations()); an != "" {
+				ename = an
+			}
 
-			t := e.Name()
+			t := ename
 			for _, an := range e.Annotations().ToArray() {
 				if an.Id() == C.Tag {
 					t = an.Value().Text()
@@ -134,7 +157,7 @@ func (n *node) defineEnum(w io.Writer) {
 					t = ""
 				}
 			}
-			ev[e.CodeOrder()] = enumval{e, i, t, n}
+			ev[e.CodeOrder()] = enumval{e, i, ename, t, n}
 		}
 
 		// not an iota, so type has to go on each line
@@ -366,13 +389,19 @@ func (n *node) defineField(w io.Writer, f Field) {
 		return
 	}
 
+	fname := f.Name()
+	if an := nameAnnotation(f.Annotations()); an != "" {
+		fname = an
+	}
+	fname = title(fname)
+
 	var g, s bytes.Buffer
 
 	settag := ""
 	if f.DiscriminantValue() != 0xFFFF {
 		settag = sprintf(" C.Struct(s).Set16(%d, %d);", n.Struct().DiscriminantOffset()*2, f.DiscriminantValue())
 		if t.Which() == TYPE_VOID {
-			fprintf(&s, "func (s %s) Set%s() {%s }\n", n.name, title(f.Name()), settag)
+			fprintf(&s, "func (s %s) Set%s() {%s }\n", n.name, fname, settag)
 			w.Write(s.Bytes())
 			return
 		}
@@ -392,8 +421,8 @@ func (n *node) defineField(w io.Writer, f Field) {
 			}
 		}
 	}
-	fprintf(&g, "func (s %s) %s() ", n.name, title(f.Name()))
-	fprintf(&s, "func (s %s) Set%s", n.name, title(f.Name()))
+	fprintf(&g, "func (s %s) %s() ", n.name, fname)
+	fprintf(&s, "func (s %s) Set%s", n.name, fname)
 
 	switch t.Which() {
 	case TYPE_BOOL:
@@ -712,9 +741,14 @@ func (n *node) defineStructFuncs(w io.Writer) {
 			n.defineField(w, f)
 		case FIELD_GROUP:
 			g := findNode(f.Group().TypeId())
-			fprintf(w, "func (s %s) %s() %s { return %s(s) }\n", n.name, title(f.Name()), g.name, g.name)
+			fname := f.Name()
+			if an := nameAnnotation(f.Annotations()); an != "" {
+				fname = an
+			}
+			fname = title(fname)
+			fprintf(w, "func (s %s) %s() %s { return %s(s) }\n", n.name, fname, g.name, g.name)
 			if f.DiscriminantValue() != 0xFFFF {
-				fprintf(w, "func (s %s) Set%s() { C.Struct(s).Set16(%d, %d) }\n", n.name, title(f.Name()), n.Struct().DiscriminantOffset()*2, f.DiscriminantValue())
+				fprintf(w, "func (s %s) Set%s() { C.Struct(s).Set16(%d, %d) }\n", n.name, fname, n.Struct().DiscriminantOffset()*2, f.DiscriminantValue())
 			}
 			g.defineStructFuncs(w)
 		}
