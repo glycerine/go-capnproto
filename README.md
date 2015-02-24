@@ -42,4 +42,4 @@ http://kentonv.github.io/capnproto/
 
 Note, go-capnproto doesn't support the RPC layer of capnp, which is a more recent work-in-progress than the serialization.  Personally I use capnp (for schema based serialization) with mangos (for network transport; https://github.com/gdamore/mangos ). Here is an example of using them together: https://github.com/glycerine/goq
 
-Update: 2015 February: Ross Light (https://githbub.com/zombiezen) is working on a branch of go-capnproto with the aim of adding capabilities/RPC eventually (https://github.com/zombiezen/go-capnproto). It's not quite ready yet, and does involve some API breakage, but its an exciting development for the future. If you want to contribute to the Capnproto rpc/capability in Go effort, check out his branch.
+Update: 2015 February: Ross Light (https://github.com/zombiezen) is working on a branch of go-capnproto with the aim of adding capabilities/RPC eventually (https://github.com/zombiezen/go-capnproto). It's not quite ready yet, and does involve some API breakage, but its an exciting development for the future. If you want to contribute to the Capnproto rpc/capability in Go effort, check out his branch.
