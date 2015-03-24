@@ -655,8 +655,13 @@ func (p BitList) ToArray() []bool {
 	return v
 }
 
+// UInt8List.ToArray contains an important optimization: the returned slice points directly
+// to the underlying segment bytes, not a copy. This is typically what is wanted, but
+// be aware if you change the segment you will change the contents of the returned byte slice.
 func (p UInt8List) ToArray() []uint8 {
 	if p.typ == TypeList && p.datasz == 1 && p.ptrs == 0 {
+		// an important optimization to reduce copying: the returned slices points to the actual bytes instead of a copy.
+		// fmt.Printf("\n *** UInt8List.ToArray(): copy avoidance used!\n")
 		return p.Segment.Data[p.off : p.off+p.length]
 	}
 
