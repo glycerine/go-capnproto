@@ -9,7 +9,7 @@ import (
 
 	capn "github.com/glycerine/go-capnproto"
 	air "github.com/glycerine/go-capnproto/aircraftlib"
-	cv "github.com/smartystreets/goconvey/convey"
+	cv "github.com/glycerine/goconvey/convey"
 )
 
 // demonstrate and test serialization to List(List(Struct(List))), nested lists.

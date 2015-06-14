@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	air "github.com/glycerine/go-capnproto/aircraftlib"
-	cv "github.com/smartystreets/goconvey/convey"
+	cv "github.com/glycerine/goconvey/convey"
 )
 
 func TestCreationOfZDate(t *testing.T) {
