@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	C "github.com/glycerine/go-capnproto"
 	"io"
 	"math"
 	"os"
@@ -11,6 +10,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	C "github.com/glycerine/go-capnproto"
 )
 
 var (
@@ -283,8 +284,8 @@ func (n *node) writeValue(w io.Writer, t Type, v Value) {
 	case TYPE_STRUCT:
 		fprintf(w, "%s(%s.Root(%d))", findNode(t.Struct().TypeId()).remoteName(n), g_bufname, copyData(v.Struct()))
 
-	case TYPE_OBJECT:
-		fprintf(w, "%s.Root(%d)", g_bufname, copyData(v.Object()))
+	case TYPE_ANYPOINTER:
+		fprintf(w, "%s.Root(%d)", g_bufname, copyData(v.AnyPointer()))
 
 	case TYPE_LIST:
 		assert(v.Which() == VALUE_LIST, "expected list value")
@@ -322,7 +323,7 @@ func (n *node) writeValue(w io.Writer, t Type, v Value) {
 			fprintf(w, "%s_List(%s.Root(%d))", findNode(lt.Enum().TypeId()).remoteName(n), g_bufname, copyData(v.List()))
 		case TYPE_STRUCT:
 			fprintf(w, "%s_List(%s.Root(%d))", findNode(lt.Struct().TypeId()).remoteName(n), g_bufname, copyData(v.List()))
-		case TYPE_LIST, TYPE_OBJECT:
+		case TYPE_LIST, TYPE_ANYPOINTER:
 			fprintf(w, "C.PointerList(%s.Root(%d))", g_bufname, copyData(v.List()))
 		}
 	}
@@ -600,11 +601,11 @@ func (n *node) defineField(w io.Writer, f Field) {
 		}
 		fprintf(&s, "(v %s) {%s C.Struct(s).SetObject(%d, C.Object(v)) }\n", ni.remoteName(n), settag, off)
 
-	case TYPE_OBJECT:
-		assert(def.Which() == VALUE_VOID || def.Which() == VALUE_OBJECT, "expected object default")
-		if def.Which() == VALUE_OBJECT && def.Object().HasData() {
+	case TYPE_ANYPOINTER:
+		assert(def.Which() == VALUE_VOID || def.Which() == VALUE_ANYPOINTER, "expected object default")
+		if def.Which() == VALUE_ANYPOINTER && def.AnyPointer().HasData() {
 			fprintf(&g, "C.Object { return C.Struct(s).GetObject(%d).ToObjectDefault(%s, %d) }\n",
-				off, g_bufname, copyData(def.Object()))
+				off, g_bufname, copyData(def.AnyPointer()))
 		} else {
 			fprintf(&g, "C.Object { return C.Struct(s).GetObject(%d) }\n", off)
 		}
@@ -650,7 +651,7 @@ func (n *node) defineField(w io.Writer, f Field) {
 		case TYPE_STRUCT:
 			ni := findNode(lt.Struct().TypeId())
 			typ = sprintf("%s_List", ni.remoteName(n))
-		case TYPE_OBJECT, TYPE_LIST:
+		case TYPE_ANYPOINTER, TYPE_LIST:
 			typ = "C.PointerList"
 		}
 
@@ -875,7 +876,7 @@ func (t Type) json(w io.Writer) {
 	case TYPE_LIST:
 		typ := t.List().ElementType()
 		which := typ.Which()
-		if which == TYPE_LIST || which == TYPE_OBJECT {
+		if which == TYPE_LIST || which == TYPE_ANYPOINTER {
 			// untyped list, cant do anything but report
 			// that a field existed.
 			//
