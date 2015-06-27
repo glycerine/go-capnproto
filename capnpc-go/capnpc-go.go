@@ -796,6 +796,65 @@ func (n *node) defineTypeJsonFuncs(w io.Writer) {
 	}
 }
 
+func (n *node) defineStringFuncs(w io.Writer) {
+
+	//	g_imported["io"] = true
+	//	g_imported["bufio"] = true
+	//	g_imported["bytes"] = true
+
+	fprintf(w, "func (s %s) String() string {\n", n.name)
+	fprintf(w, " var r string;")
+
+	switch n.Which() {
+	case NODE_STRUCT:
+		//n.stringStruct(w)
+
+		/*
+			            fprintf(w, ")\n")
+						fprintf(w, "func (c %s) String() string {\n", n.name)
+						fprintf(w, "switch c {\n")
+						for _, e := range ev {
+							if e.tag != "" {
+								fprintf(w, "case %s: return \"%s\"\n", e.fullName(), e.tag)
+							}
+						}
+						fprintf(w, "default: return \"\"\n")
+						fprintf(w, "}\n}\n\n")
+		*/
+	}
+
+	fprintf(w, "return r };")
+
+}
+
+/*
+// Write statements that will write a struct to a string
+func (n *node) stringStruct(w io.Writer) {
+	fprintf(w, `err = b.WriteByte('{');`)
+	writeErrCheck(w)
+	for i, f := range n.codeOrderFields() {
+		if f.DiscriminantValue() != 0xFFFF {
+			enumname := fmt.Sprintf("%s_%s", strings.ToUpper(n.name), strings.ToUpper(f.Name()))
+			fprintf(w, "if s.Which() == %s {", enumname)
+		}
+		if i != 0 {
+			fprintf(w, `
+				err = b.WriteByte(',');
+			`)
+			writeErrCheck(w)
+		}
+		fprintf(w, `_, err = b.WriteString("\"%s\":");`, f.Name())
+		writeErrCheck(w)
+		f.json(w)
+		if f.DiscriminantValue() != 0xFFFF {
+			fprintf(w, "};")
+		}
+	}
+	fprintf(w, `err = b.WriteByte('}');`)
+	writeErrCheck(w)
+}
+*/
+
 func writeErrCheck(w io.Writer) {
 	fprintf(w, "if err != nil { return err; };")
 }
@@ -1011,6 +1070,7 @@ func main() {
 					n.defineStructFuncs(&buf)
 					n.defineTypeJsonFuncs(&buf)
 					n.defineStructList(&buf)
+					n.defineStringFuncs(&buf)
 				}
 			}
 		}

@@ -38,6 +38,10 @@ func (s Zdate_List) ToArray() []Zdate {
 	return a
 }
 func (s Zdate_List) Set(i int, item Zdate) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Zdate) String() string {
+	var r string
+	return r
+}
 
 type Zdata C.Struct
 
@@ -65,6 +69,10 @@ func (s Zdata_List) ToArray() []Zdata {
 	return a
 }
 func (s Zdata_List) Set(i int, item Zdata) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Zdata) String() string {
+	var r string
+	return r
+}
 
 type Airport uint16
 
@@ -175,6 +183,10 @@ func (s PlaneBase_List) ToArray() []PlaneBase {
 	return a
 }
 func (s PlaneBase_List) Set(i int, item PlaneBase) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s PlaneBase) String() string {
+	var r string
+	return r
+}
 
 type B737 C.Struct
 
@@ -202,6 +214,10 @@ func (s B737_List) ToArray() []B737 {
 	return a
 }
 func (s B737_List) Set(i int, item B737) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s B737) String() string {
+	var r string
+	return r
+}
 
 type A320 C.Struct
 
@@ -229,6 +245,10 @@ func (s A320_List) ToArray() []A320 {
 	return a
 }
 func (s A320_List) Set(i int, item A320) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s A320) String() string {
+	var r string
+	return r
+}
 
 type F16 C.Struct
 
@@ -256,6 +276,10 @@ func (s F16_List) ToArray() []F16 {
 	return a
 }
 func (s F16_List) Set(i int, item F16) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s F16) String() string {
+	var r string
+	return r
+}
 
 type Regression C.Struct
 
@@ -295,6 +319,10 @@ func (s Regression_List) ToArray() []Regression {
 	return a
 }
 func (s Regression_List) Set(i int, item Regression) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Regression) String() string {
+	var r string
+	return r
+}
 
 type Aircraft C.Struct
 type Aircraft_Which uint16
@@ -338,6 +366,10 @@ func (s Aircraft_List) ToArray() []Aircraft {
 	return a
 }
 func (s Aircraft_List) Set(i int, item Aircraft) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Aircraft) String() string {
+	var r string
+	return r
+}
 
 type Z C.Struct
 type Z_Which uint16
@@ -496,6 +528,10 @@ func (s Z_List) ToArray() []Z {
 	return a
 }
 func (s Z_List) Set(i int, item Z) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Z) String() string {
+	var r string
+	return r
+}
 
 type Counter C.Struct
 
@@ -529,6 +565,10 @@ func (s Counter_List) ToArray() []Counter {
 	return a
 }
 func (s Counter_List) Set(i int, item Counter) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Counter) String() string {
+	var r string
+	return r
+}
 
 type Bag C.Struct
 
@@ -556,6 +596,10 @@ func (s Bag_List) ToArray() []Bag {
 	return a
 }
 func (s Bag_List) Set(i int, item Bag) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Bag) String() string {
+	var r string
+	return r
+}
 
 type Zserver C.Struct
 
@@ -585,6 +629,10 @@ func (s Zserver_List) ToArray() []Zserver {
 	return a
 }
 func (s Zserver_List) Set(i int, item Zserver) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Zserver) String() string {
+	var r string
+	return r
+}
 
 type Zjob C.Struct
 
@@ -614,6 +662,10 @@ func (s Zjob_List) ToArray() []Zjob {
 	return a
 }
 func (s Zjob_List) Set(i int, item Zjob) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Zjob) String() string {
+	var r string
+	return r
+}
 
 type VerEmpty C.Struct
 
@@ -641,6 +693,10 @@ func (s VerEmpty_List) ToArray() []VerEmpty {
 	return a
 }
 func (s VerEmpty_List) Set(i int, item VerEmpty) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s VerEmpty) String() string {
+	var r string
+	return r
+}
 
 type VerOneData C.Struct
 
@@ -670,6 +726,10 @@ func (s VerOneData_List) ToArray() []VerOneData {
 	return a
 }
 func (s VerOneData_List) Set(i int, item VerOneData) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s VerOneData) String() string {
+	var r string
+	return r
+}
 
 type VerTwoData C.Struct
 
@@ -701,6 +761,10 @@ func (s VerTwoData_List) ToArray() []VerTwoData {
 	return a
 }
 func (s VerTwoData_List) Set(i int, item VerTwoData) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s VerTwoData) String() string {
+	var r string
+	return r
+}
 
 type VerOnePtr C.Struct
 
@@ -730,6 +794,10 @@ func (s VerOnePtr_List) ToArray() []VerOnePtr {
 	return a
 }
 func (s VerOnePtr_List) Set(i int, item VerOnePtr) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s VerOnePtr) String() string {
+	var r string
+	return r
+}
 
 type VerTwoPtr C.Struct
 
@@ -761,6 +829,10 @@ func (s VerTwoPtr_List) ToArray() []VerTwoPtr {
 	return a
 }
 func (s VerTwoPtr_List) Set(i int, item VerTwoPtr) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s VerTwoPtr) String() string {
+	var r string
+	return r
+}
 
 type VerTwoDataTwoPtr C.Struct
 
@@ -806,6 +878,10 @@ func (s VerTwoDataTwoPtr_List) ToArray() []VerTwoDataTwoPtr {
 func (s VerTwoDataTwoPtr_List) Set(i int, item VerTwoDataTwoPtr) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
+func (s VerTwoDataTwoPtr) String() string {
+	var r string
+	return r
+}
 
 type HoldsVerEmptyList C.Struct
 
@@ -844,6 +920,10 @@ func (s HoldsVerEmptyList_List) ToArray() []HoldsVerEmptyList {
 }
 func (s HoldsVerEmptyList_List) Set(i int, item HoldsVerEmptyList) {
 	C.PointerList(s).Set(i, C.Object(item))
+}
+func (s HoldsVerEmptyList) String() string {
+	var r string
+	return r
 }
 
 type HoldsVerOneDataList C.Struct
@@ -888,6 +968,10 @@ func (s HoldsVerOneDataList_List) ToArray() []HoldsVerOneDataList {
 func (s HoldsVerOneDataList_List) Set(i int, item HoldsVerOneDataList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
+func (s HoldsVerOneDataList) String() string {
+	var r string
+	return r
+}
 
 type HoldsVerTwoDataList C.Struct
 
@@ -931,6 +1015,10 @@ func (s HoldsVerTwoDataList_List) ToArray() []HoldsVerTwoDataList {
 func (s HoldsVerTwoDataList_List) Set(i int, item HoldsVerTwoDataList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
+func (s HoldsVerTwoDataList) String() string {
+	var r string
+	return r
+}
 
 type HoldsVerOnePtrList C.Struct
 
@@ -972,6 +1060,10 @@ func (s HoldsVerOnePtrList_List) ToArray() []HoldsVerOnePtrList {
 func (s HoldsVerOnePtrList_List) Set(i int, item HoldsVerOnePtrList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
+func (s HoldsVerOnePtrList) String() string {
+	var r string
+	return r
+}
 
 type HoldsVerTwoPtrList C.Struct
 
@@ -1012,6 +1104,10 @@ func (s HoldsVerTwoPtrList_List) ToArray() []HoldsVerTwoPtrList {
 }
 func (s HoldsVerTwoPtrList_List) Set(i int, item HoldsVerTwoPtrList) {
 	C.PointerList(s).Set(i, C.Object(item))
+}
+func (s HoldsVerTwoPtrList) String() string {
+	var r string
+	return r
 }
 
 type HoldsVerTwoTwoList C.Struct
@@ -1056,6 +1152,10 @@ func (s HoldsVerTwoTwoList_List) ToArray() []HoldsVerTwoTwoList {
 func (s HoldsVerTwoTwoList_List) Set(i int, item HoldsVerTwoTwoList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
+func (s HoldsVerTwoTwoList) String() string {
+	var r string
+	return r
+}
 
 type HoldsVerTwoTwoPlus C.Struct
 
@@ -1098,6 +1198,10 @@ func (s HoldsVerTwoTwoPlus_List) ToArray() []HoldsVerTwoTwoPlus {
 }
 func (s HoldsVerTwoTwoPlus_List) Set(i int, item HoldsVerTwoTwoPlus) {
 	C.PointerList(s).Set(i, C.Object(item))
+}
+func (s HoldsVerTwoTwoPlus) String() string {
+	var r string
+	return r
 }
 
 type VerTwoTwoPlus C.Struct
@@ -1144,6 +1248,10 @@ func (s VerTwoTwoPlus_List) ToArray() []VerTwoTwoPlus {
 	return a
 }
 func (s VerTwoTwoPlus_List) Set(i int, item VerTwoTwoPlus) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s VerTwoTwoPlus) String() string {
+	var r string
+	return r
+}
 
 type HoldsText C.Struct
 
@@ -1177,6 +1285,10 @@ func (s HoldsText_List) ToArray() []HoldsText {
 	return a
 }
 func (s HoldsText_List) Set(i int, item HoldsText) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s HoldsText) String() string {
+	var r string
+	return r
+}
 
 type WrapEmpty C.Struct
 
@@ -1208,6 +1320,10 @@ func (s WrapEmpty_List) ToArray() []WrapEmpty {
 	return a
 }
 func (s WrapEmpty_List) Set(i int, item WrapEmpty) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s WrapEmpty) String() string {
+	var r string
+	return r
+}
 
 type Wrap2x2 C.Struct
 
@@ -1239,6 +1355,10 @@ func (s Wrap2x2_List) ToArray() []Wrap2x2 {
 	return a
 }
 func (s Wrap2x2_List) Set(i int, item Wrap2x2) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Wrap2x2) String() string {
+	var r string
+	return r
+}
 
 type Wrap2x2plus C.Struct
 
@@ -1270,6 +1390,10 @@ func (s Wrap2x2plus_List) ToArray() []Wrap2x2plus {
 	return a
 }
 func (s Wrap2x2plus_List) Set(i int, item Wrap2x2plus) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Wrap2x2plus) String() string {
+	var r string
+	return r
+}
 
 type Endpoint C.Struct
 
@@ -1303,6 +1427,10 @@ func (s Endpoint_List) ToArray() []Endpoint {
 	return a
 }
 func (s Endpoint_List) Set(i int, item Endpoint) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Endpoint) String() string {
+	var r string
+	return r
+}
 
 type VoidUnion C.Struct
 type VoidUnion_Which uint16
@@ -1339,6 +1467,10 @@ func (s VoidUnion_List) ToArray() []VoidUnion {
 	return a
 }
 func (s VoidUnion_List) Set(i int, item VoidUnion) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s VoidUnion) String() string {
+	var r string
+	return r
+}
 
 type Nester1Capn C.Struct
 
@@ -1368,6 +1500,10 @@ func (s Nester1Capn_List) ToArray() []Nester1Capn {
 	return a
 }
 func (s Nester1Capn_List) Set(i int, item Nester1Capn) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s Nester1Capn) String() string {
+	var r string
+	return r
+}
 
 type RWTestCapn C.Struct
 
@@ -1397,6 +1533,10 @@ func (s RWTestCapn_List) ToArray() []RWTestCapn {
 	return a
 }
 func (s RWTestCapn_List) Set(i int, item RWTestCapn) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s RWTestCapn) String() string {
+	var r string
+	return r
+}
 
 type ListStructCapn C.Struct
 
@@ -1428,6 +1568,10 @@ func (s ListStructCapn_List) ToArray() []ListStructCapn {
 	return a
 }
 func (s ListStructCapn_List) Set(i int, item ListStructCapn) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s ListStructCapn) String() string {
+	var r string
+	return r
+}
 
 type StackingRoot C.Struct
 
@@ -1463,6 +1607,10 @@ func (s StackingRoot_List) ToArray() []StackingRoot {
 	return a
 }
 func (s StackingRoot_List) Set(i int, item StackingRoot) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s StackingRoot) String() string {
+	var r string
+	return r
+}
 
 type StackingA C.Struct
 
@@ -1494,6 +1642,10 @@ func (s StackingA_List) ToArray() []StackingA {
 	return a
 }
 func (s StackingA_List) Set(i int, item StackingA) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s StackingA) String() string {
+	var r string
+	return r
+}
 
 type StackingB C.Struct
 
@@ -1523,6 +1675,10 @@ func (s StackingB_List) ToArray() []StackingB {
 	return a
 }
 func (s StackingB_List) Set(i int, item StackingB) { C.PointerList(s).Set(i, C.Object(item)) }
+func (s StackingB) String() string {
+	var r string
+	return r
+}
 
 var x_832bcc6686a26d56 = C.NewBuffer([]byte{
 	0, 0, 0, 0, 1, 0, 1, 0,
