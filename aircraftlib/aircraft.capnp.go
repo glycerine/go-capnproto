@@ -3,7 +3,11 @@ package aircraftlib
 // AUTO GENERATED - DO NOT EDIT
 
 import (
+	"bufio"
+	"bytes"
+	"encoding/json"
 	C "github.com/glycerine/go-capnproto"
+	"io"
 	"math"
 	"net"
 )
@@ -20,9 +24,154 @@ func (s Zdate) Month() uint8           { return C.Struct(s).Get8(2) }
 func (s Zdate) SetMonth(v uint8)       { C.Struct(s).Set8(2, v) }
 func (s Zdate) Day() uint8             { return C.Struct(s).Get8(3) }
 func (s Zdate) SetDay(v uint8)         { C.Struct(s).Set8(3, v) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Zdate) MarshalJSON() (bs []byte, err error) { return }
+func (s Zdate) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"year\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Year()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"month\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Month()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"day\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Day()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zdate) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Zdate) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("year = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Year()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("month = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Month()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("day = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Day()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zdate) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Zdate_List C.PointerList
 
@@ -38,10 +187,6 @@ func (s Zdate_List) ToArray() []Zdate {
 	return a
 }
 func (s Zdate_List) Set(i int, item Zdate) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Zdate) String() string {
-	var r string
-	return r
-}
 
 type Zdata C.Struct
 
@@ -51,9 +196,78 @@ func AutoNewZdata(s *C.Segment) Zdata  { return Zdata(s.NewStructAR(0, 1)) }
 func ReadRootZdata(s *C.Segment) Zdata { return Zdata(s.Root(0).ToStruct()) }
 func (s Zdata) Data() []byte           { return C.Struct(s).GetObject(0).ToData() }
 func (s Zdata) SetData(v []byte)       { C.Struct(s).SetObject(0, s.Segment.NewData(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Zdata) MarshalJSON() (bs []byte, err error) { return }
+func (s Zdata) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"data\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Data()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zdata) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Zdata) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("data = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Data()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zdata) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Zdata_List C.PointerList
 
@@ -69,10 +283,6 @@ func (s Zdata_List) ToArray() []Zdata {
 	return a
 }
 func (s Zdata_List) Set(i int, item Zdata) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Zdata) String() string {
-	var r string
-	return r
-}
 
 type Airport uint16
 
@@ -141,9 +351,44 @@ func (s Airport_List) ToArray() []Airport {
 	}
 	return a
 }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Airport) MarshalJSON() (bs []byte, err error) { return }
+func (s Airport) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	buf, err = json.Marshal(s.String())
+	if err != nil {
+		return err
+	}
+	_, err = b.Write(buf)
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Airport) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Airport) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	_, err = b.WriteString(s.String())
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Airport) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type PlaneBase C.Struct
 
@@ -163,9 +408,296 @@ func (s PlaneBase) Capacity() int64            { return int64(C.Struct(s).Get64(
 func (s PlaneBase) SetCapacity(v int64)        { C.Struct(s).Set64(16, uint64(v)) }
 func (s PlaneBase) MaxSpeed() float64          { return math.Float64frombits(C.Struct(s).Get64(24)) }
 func (s PlaneBase) SetMaxSpeed(v float64)      { C.Struct(s).Set64(24, math.Float64bits(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s PlaneBase) MarshalJSON() (bs []byte, err error) { return }
+func (s PlaneBase) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"name\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Name()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"homes\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Homes()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"rating\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Rating()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"canFly\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.CanFly()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"capacity\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Capacity()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"maxSpeed\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MaxSpeed()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s PlaneBase) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s PlaneBase) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("name = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Name()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("homes = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Homes()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("rating = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Rating()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("canFly = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.CanFly()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("capacity = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Capacity()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("maxSpeed = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MaxSpeed()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s PlaneBase) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type PlaneBase_List C.PointerList
 
@@ -183,10 +715,6 @@ func (s PlaneBase_List) ToArray() []PlaneBase {
 	return a
 }
 func (s PlaneBase_List) Set(i int, item PlaneBase) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s PlaneBase) String() string {
-	var r string
-	return r
-}
 
 type B737 C.Struct
 
@@ -196,9 +724,70 @@ func AutoNewB737(s *C.Segment) B737  { return B737(s.NewStructAR(0, 1)) }
 func ReadRootB737(s *C.Segment) B737 { return B737(s.Root(0).ToStruct()) }
 func (s B737) Base() PlaneBase       { return PlaneBase(C.Struct(s).GetObject(0).ToStruct()) }
 func (s B737) SetBase(v PlaneBase)   { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s B737) MarshalJSON() (bs []byte, err error) { return }
+func (s B737) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"base\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s B737) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s B737) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("base = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s B737) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type B737_List C.PointerList
 
@@ -214,10 +803,6 @@ func (s B737_List) ToArray() []B737 {
 	return a
 }
 func (s B737_List) Set(i int, item B737) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s B737) String() string {
-	var r string
-	return r
-}
 
 type A320 C.Struct
 
@@ -227,9 +812,70 @@ func AutoNewA320(s *C.Segment) A320  { return A320(s.NewStructAR(0, 1)) }
 func ReadRootA320(s *C.Segment) A320 { return A320(s.Root(0).ToStruct()) }
 func (s A320) Base() PlaneBase       { return PlaneBase(C.Struct(s).GetObject(0).ToStruct()) }
 func (s A320) SetBase(v PlaneBase)   { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s A320) MarshalJSON() (bs []byte, err error) { return }
+func (s A320) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"base\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s A320) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s A320) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("base = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s A320) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type A320_List C.PointerList
 
@@ -245,10 +891,6 @@ func (s A320_List) ToArray() []A320 {
 	return a
 }
 func (s A320_List) Set(i int, item A320) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s A320) String() string {
-	var r string
-	return r
-}
 
 type F16 C.Struct
 
@@ -258,9 +900,70 @@ func AutoNewF16(s *C.Segment) F16  { return F16(s.NewStructAR(0, 1)) }
 func ReadRootF16(s *C.Segment) F16 { return F16(s.Root(0).ToStruct()) }
 func (s F16) Base() PlaneBase      { return PlaneBase(C.Struct(s).GetObject(0).ToStruct()) }
 func (s F16) SetBase(v PlaneBase)  { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s F16) MarshalJSON() (bs []byte, err error) { return }
+func (s F16) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"base\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s F16) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s F16) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("base = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s F16) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type F16_List C.PointerList
 
@@ -276,10 +979,6 @@ func (s F16_List) ToArray() []F16 {
 	return a
 }
 func (s F16_List) Set(i int, item F16) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s F16) String() string {
-	var r string
-	return r
-}
 
 type Regression C.Struct
 
@@ -299,9 +998,324 @@ func (s Regression) Ymu() float64                { return math.Float64frombits(C
 func (s Regression) SetYmu(v float64)            { C.Struct(s).Set64(8, math.Float64bits(v)) }
 func (s Regression) Ysd() float64                { return math.Float64frombits(C.Struct(s).Get64(16)) }
 func (s Regression) SetYsd(v float64)            { C.Struct(s).Set64(16, math.Float64bits(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Regression) MarshalJSON() (bs []byte, err error) { return }
+func (s Regression) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"base\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"b0\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.B0()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"beta\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Beta()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"planes\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Planes()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ymu\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ymu()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ysd\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ysd()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Regression) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Regression) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("base = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Base()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("b0 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.B0()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("beta = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Beta()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("planes = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Planes()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ymu = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ymu()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ysd = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ysd()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Regression) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Regression_List C.PointerList
 
@@ -319,10 +1333,6 @@ func (s Regression_List) ToArray() []Regression {
 	return a
 }
 func (s Regression_List) Set(i int, item Regression) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Regression) String() string {
-	var r string
-	return r
-}
 
 type Aircraft C.Struct
 type Aircraft_Which uint16
@@ -346,9 +1356,172 @@ func (s Aircraft) A320() A320                { return A320(C.Struct(s).GetObject
 func (s Aircraft) SetA320(v A320)            { C.Struct(s).Set16(0, 2); C.Struct(s).SetObject(0, C.Object(v)) }
 func (s Aircraft) F16() F16                  { return F16(C.Struct(s).GetObject(0).ToStruct()) }
 func (s Aircraft) SetF16(v F16)              { C.Struct(s).Set16(0, 3); C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Aircraft) MarshalJSON() (bs []byte, err error) { return }
+func (s Aircraft) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	if s.Which() == AIRCRAFT_VOID {
+		_, err = b.WriteString("\"void\":")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	if s.Which() == AIRCRAFT_B737 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"b737\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.B737()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == AIRCRAFT_A320 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"a320\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.A320()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == AIRCRAFT_F16 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"f16\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F16()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Aircraft) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Aircraft) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	if s.Which() == AIRCRAFT_VOID {
+		_, err = b.WriteString("void = ")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	if s.Which() == AIRCRAFT_B737 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("b737 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.B737()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == AIRCRAFT_A320 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("a320 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.A320()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == AIRCRAFT_F16 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("f16 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F16()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Aircraft) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Aircraft_List C.PointerList
 
@@ -366,10 +1539,6 @@ func (s Aircraft_List) ToArray() []Aircraft {
 	return a
 }
 func (s Aircraft_List) Set(i int, item Aircraft) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Aircraft) String() string {
-	var r string
-	return r
-}
 
 type Z C.Struct
 type Z_Which uint16
@@ -510,9 +1679,2130 @@ func (s Z) Zdatavec() Zdata_List     { return Zdata_List(C.Struct(s).GetObject(0
 func (s Z) SetZdatavec(v Zdata_List) { C.Struct(s).Set16(0, 38); C.Struct(s).SetObject(0, C.Object(v)) }
 func (s Z) Boolvec() C.BitList       { return C.BitList(C.Struct(s).GetObject(0)) }
 func (s Z) SetBoolvec(v C.BitList)   { C.Struct(s).Set16(0, 39); C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Z) MarshalJSON() (bs []byte, err error) { return }
+func (s Z) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	if s.Which() == Z_VOID {
+		_, err = b.WriteString("\"void\":")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	if s.Which() == Z_ZZ {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"zz\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zz()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F64 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"f64\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F64()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F32 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"f32\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F32()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I64 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i64\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I64()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I32 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i32\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I32()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I16 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i16\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I16()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I8 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i8\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I8()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U64 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u64\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U64()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U32 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u32\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U32()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U16 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u16\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U16()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U8 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u8\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U8()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_BOOL {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"bool\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Bool()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_TEXT {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"text\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Text()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_BLOB {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"blob\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Blob()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F64VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"f64vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F64vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F32VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"f32vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F32vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I64VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i64vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I64vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I32VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i32vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I32vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I16VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i16vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I16vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I8VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"i8vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I8vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U64VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u64vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U64vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U32VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u32vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U32vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U16VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u16vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U16vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U8VEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"u8vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U8vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZVEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"zvec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zvec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZVECVEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"zvecvec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zvecvec()
+			_ = s
+			_, err = b.WriteString("\"untyped list\"")
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATE {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"zdate\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdate()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATA {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"zdata\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdata()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_AIRCRAFTVEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"aircraftvec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Aircraftvec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_AIRCRAFT {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"aircraft\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Aircraft()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_REGRESSION {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"regression\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Regression()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_PLANEBASE {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"planebase\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Planebase()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_AIRPORT {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"airport\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Airport()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_B737 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"b737\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.B737()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_A320 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"a320\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.A320()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F16 {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"f16\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F16()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATEVEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"zdatevec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdatevec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATAVEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"zdatavec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdatavec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_BOOLVEC {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"boolvec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Boolvec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Z) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Z) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	if s.Which() == Z_VOID {
+		_, err = b.WriteString("void = ")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	if s.Which() == Z_ZZ {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("zz = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zz()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F64 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("f64 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F64()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F32 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("f32 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F32()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I64 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i64 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I64()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I32 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i32 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I32()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I16 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i16 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I16()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I8 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i8 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I8()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U64 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u64 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U64()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U32 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u32 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U32()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U16 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u16 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U16()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U8 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u8 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U8()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_BOOL {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("bool = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Bool()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_TEXT {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("text = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Text()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_BLOB {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("blob = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Blob()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F64VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("f64vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F64vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F32VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("f32vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F32vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I64VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i64vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I64vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I32VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i32vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I32vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I16VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i16vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I16vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_I8VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("i8vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.I8vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U64VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u64vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U64vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U32VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u32vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U32vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U16VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u16vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U16vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_U8VEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("u8vec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.U8vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZVEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("zvec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zvec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteCapLit(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZVECVEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("zvecvec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zvecvec()
+			_ = s
+			_, err = b.WriteString("\"untyped list\"")
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATE {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("zdate = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdate()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATA {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("zdata = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdata()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_AIRCRAFTVEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("aircraftvec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Aircraftvec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteCapLit(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_AIRCRAFT {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("aircraft = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Aircraft()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_REGRESSION {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("regression = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Regression()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_PLANEBASE {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("planebase = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Planebase()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_AIRPORT {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("airport = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Airport()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_B737 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("b737 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.B737()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_A320 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("a320 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.A320()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_F16 {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("f16 = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.F16()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATEVEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("zdatevec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdatevec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteCapLit(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_ZDATAVEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("zdatavec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Zdatavec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteCapLit(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	if s.Which() == Z_BOOLVEC {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("boolvec = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Boolvec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Z) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Z_List C.PointerList
 
@@ -528,10 +3818,6 @@ func (s Z_List) ToArray() []Z {
 	return a
 }
 func (s Z_List) Set(i int, item Z) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Z) String() string {
-	var r string
-	return r
-}
 
 type Counter C.Struct
 
@@ -545,9 +3831,190 @@ func (s Counter) Words() string            { return C.Struct(s).GetObject(0).ToT
 func (s Counter) SetWords(v string)        { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s Counter) Wordlist() C.TextList     { return C.TextList(C.Struct(s).GetObject(1)) }
 func (s Counter) SetWordlist(v C.TextList) { C.Struct(s).SetObject(1, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Counter) MarshalJSON() (bs []byte, err error) { return }
+func (s Counter) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"size\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Size()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"words\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Words()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"wordlist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Wordlist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Counter) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Counter) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("size = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Size()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("words = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Words()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("wordlist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Wordlist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Counter) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Counter_List C.PointerList
 
@@ -565,10 +4032,6 @@ func (s Counter_List) ToArray() []Counter {
 	return a
 }
 func (s Counter_List) Set(i int, item Counter) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Counter) String() string {
-	var r string
-	return r
-}
 
 type Bag C.Struct
 
@@ -578,9 +4041,70 @@ func AutoNewBag(s *C.Segment) Bag  { return Bag(s.NewStructAR(0, 1)) }
 func ReadRootBag(s *C.Segment) Bag { return Bag(s.Root(0).ToStruct()) }
 func (s Bag) Counter() Counter     { return Counter(C.Struct(s).GetObject(0).ToStruct()) }
 func (s Bag) SetCounter(v Counter) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Bag) MarshalJSON() (bs []byte, err error) { return }
+func (s Bag) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"counter\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Counter()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Bag) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Bag) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("counter = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Counter()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Bag) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Bag_List C.PointerList
 
@@ -596,10 +4120,6 @@ func (s Bag_List) ToArray() []Bag {
 	return a
 }
 func (s Bag_List) Set(i int, item Bag) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Bag) String() string {
-	var r string
-	return r
-}
 
 type Zserver C.Struct
 
@@ -609,9 +4129,106 @@ func AutoNewZserver(s *C.Segment) Zserver    { return Zserver(s.NewStructAR(0, 1
 func ReadRootZserver(s *C.Segment) Zserver   { return Zserver(s.Root(0).ToStruct()) }
 func (s Zserver) Waitingjobs() Zjob_List     { return Zjob_List(C.Struct(s).GetObject(0)) }
 func (s Zserver) SetWaitingjobs(v Zjob_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Zserver) MarshalJSON() (bs []byte, err error) { return }
+func (s Zserver) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"waitingjobs\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Waitingjobs()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zserver) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Zserver) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("waitingjobs = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Waitingjobs()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zserver) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Zserver_List C.PointerList
 
@@ -629,10 +4246,6 @@ func (s Zserver_List) ToArray() []Zserver {
 	return a
 }
 func (s Zserver_List) Set(i int, item Zserver) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Zserver) String() string {
-	var r string
-	return r
-}
 
 type Zjob C.Struct
 
@@ -644,9 +4257,152 @@ func (s Zjob) Cmd() string           { return C.Struct(s).GetObject(0).ToText() 
 func (s Zjob) SetCmd(v string)       { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s Zjob) Args() C.TextList      { return C.TextList(C.Struct(s).GetObject(1)) }
 func (s Zjob) SetArgs(v C.TextList)  { C.Struct(s).SetObject(1, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Zjob) MarshalJSON() (bs []byte, err error) { return }
+func (s Zjob) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"cmd\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Cmd()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"args\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Args()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zjob) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Zjob) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("cmd = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Cmd()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("args = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Args()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Zjob) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Zjob_List C.PointerList
 
@@ -662,10 +4418,6 @@ func (s Zjob_List) ToArray() []Zjob {
 	return a
 }
 func (s Zjob_List) Set(i int, item Zjob) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Zjob) String() string {
-	var r string
-	return r
-}
 
 type VerEmpty C.Struct
 
@@ -673,9 +4425,48 @@ func NewVerEmpty(s *C.Segment) VerEmpty      { return VerEmpty(s.NewStruct(0, 0)
 func NewRootVerEmpty(s *C.Segment) VerEmpty  { return VerEmpty(s.NewRootStruct(0, 0)) }
 func AutoNewVerEmpty(s *C.Segment) VerEmpty  { return VerEmpty(s.NewStructAR(0, 0)) }
 func ReadRootVerEmpty(s *C.Segment) VerEmpty { return VerEmpty(s.Root(0).ToStruct()) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VerEmpty) MarshalJSON() (bs []byte, err error) { return }
+func (s VerEmpty) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerEmpty) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VerEmpty) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerEmpty) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VerEmpty_List C.PointerList
 
@@ -693,10 +4484,6 @@ func (s VerEmpty_List) ToArray() []VerEmpty {
 	return a
 }
 func (s VerEmpty_List) Set(i int, item VerEmpty) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s VerEmpty) String() string {
-	var r string
-	return r
-}
 
 type VerOneData C.Struct
 
@@ -706,9 +4493,78 @@ func AutoNewVerOneData(s *C.Segment) VerOneData  { return VerOneData(s.NewStruct
 func ReadRootVerOneData(s *C.Segment) VerOneData { return VerOneData(s.Root(0).ToStruct()) }
 func (s VerOneData) Val() int16                  { return int16(C.Struct(s).Get16(0)) }
 func (s VerOneData) SetVal(v int16)              { C.Struct(s).Set16(0, uint16(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VerOneData) MarshalJSON() (bs []byte, err error) { return }
+func (s VerOneData) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"val\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerOneData) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VerOneData) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("val = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerOneData) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VerOneData_List C.PointerList
 
@@ -726,10 +4582,6 @@ func (s VerOneData_List) ToArray() []VerOneData {
 	return a
 }
 func (s VerOneData_List) Set(i int, item VerOneData) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s VerOneData) String() string {
-	var r string
-	return r
-}
 
 type VerTwoData C.Struct
 
@@ -741,9 +4593,116 @@ func (s VerTwoData) Val() int16                  { return int16(C.Struct(s).Get1
 func (s VerTwoData) SetVal(v int16)              { C.Struct(s).Set16(0, uint16(v)) }
 func (s VerTwoData) Duo() int64                  { return int64(C.Struct(s).Get64(8)) }
 func (s VerTwoData) SetDuo(v int64)              { C.Struct(s).Set64(8, uint64(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VerTwoData) MarshalJSON() (bs []byte, err error) { return }
+func (s VerTwoData) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"val\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"duo\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Duo()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoData) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VerTwoData) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("val = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("duo = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Duo()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoData) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VerTwoData_List C.PointerList
 
@@ -761,10 +4720,6 @@ func (s VerTwoData_List) ToArray() []VerTwoData {
 	return a
 }
 func (s VerTwoData_List) Set(i int, item VerTwoData) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s VerTwoData) String() string {
-	var r string
-	return r
-}
 
 type VerOnePtr C.Struct
 
@@ -774,9 +4729,70 @@ func AutoNewVerOnePtr(s *C.Segment) VerOnePtr  { return VerOnePtr(s.NewStructAR(
 func ReadRootVerOnePtr(s *C.Segment) VerOnePtr { return VerOnePtr(s.Root(0).ToStruct()) }
 func (s VerOnePtr) Ptr() VerOneData            { return VerOneData(C.Struct(s).GetObject(0).ToStruct()) }
 func (s VerOnePtr) SetPtr(v VerOneData)        { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VerOnePtr) MarshalJSON() (bs []byte, err error) { return }
+func (s VerOnePtr) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ptr\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerOnePtr) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VerOnePtr) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ptr = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerOnePtr) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VerOnePtr_List C.PointerList
 
@@ -794,10 +4810,6 @@ func (s VerOnePtr_List) ToArray() []VerOnePtr {
 	return a
 }
 func (s VerOnePtr_List) Set(i int, item VerOnePtr) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s VerOnePtr) String() string {
-	var r string
-	return r
-}
 
 type VerTwoPtr C.Struct
 
@@ -809,9 +4821,100 @@ func (s VerTwoPtr) Ptr1() VerOneData           { return VerOneData(C.Struct(s).G
 func (s VerTwoPtr) SetPtr1(v VerOneData)       { C.Struct(s).SetObject(0, C.Object(v)) }
 func (s VerTwoPtr) Ptr2() VerOneData           { return VerOneData(C.Struct(s).GetObject(1).ToStruct()) }
 func (s VerTwoPtr) SetPtr2(v VerOneData)       { C.Struct(s).SetObject(1, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VerTwoPtr) MarshalJSON() (bs []byte, err error) { return }
+func (s VerTwoPtr) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ptr1\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr1()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ptr2\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr2()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoPtr) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VerTwoPtr) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ptr1 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr1()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ptr2 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr2()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoPtr) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VerTwoPtr_List C.PointerList
 
@@ -829,10 +4932,6 @@ func (s VerTwoPtr_List) ToArray() []VerTwoPtr {
 	return a
 }
 func (s VerTwoPtr_List) Set(i int, item VerTwoPtr) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s VerTwoPtr) String() string {
-	var r string
-	return r
-}
 
 type VerTwoDataTwoPtr C.Struct
 
@@ -854,9 +4953,176 @@ func (s VerTwoDataTwoPtr) Ptr1() VerOneData     { return VerOneData(C.Struct(s).
 func (s VerTwoDataTwoPtr) SetPtr1(v VerOneData) { C.Struct(s).SetObject(0, C.Object(v)) }
 func (s VerTwoDataTwoPtr) Ptr2() VerOneData     { return VerOneData(C.Struct(s).GetObject(1).ToStruct()) }
 func (s VerTwoDataTwoPtr) SetPtr2(v VerOneData) { C.Struct(s).SetObject(1, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VerTwoDataTwoPtr) MarshalJSON() (bs []byte, err error) { return }
+func (s VerTwoDataTwoPtr) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"val\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"duo\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Duo()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ptr1\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr1()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ptr2\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr2()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoDataTwoPtr) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VerTwoDataTwoPtr) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("val = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("duo = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Duo()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ptr1 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr1()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ptr2 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr2()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoDataTwoPtr) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VerTwoDataTwoPtr_List C.PointerList
 
@@ -878,10 +5144,6 @@ func (s VerTwoDataTwoPtr_List) ToArray() []VerTwoDataTwoPtr {
 func (s VerTwoDataTwoPtr_List) Set(i int, item VerTwoDataTwoPtr) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
-func (s VerTwoDataTwoPtr) String() string {
-	var r string
-	return r
-}
 
 type HoldsVerEmptyList C.Struct
 
@@ -897,9 +5159,106 @@ func ReadRootHoldsVerEmptyList(s *C.Segment) HoldsVerEmptyList {
 }
 func (s HoldsVerEmptyList) Mylist() VerEmpty_List     { return VerEmpty_List(C.Struct(s).GetObject(0)) }
 func (s HoldsVerEmptyList) SetMylist(v VerEmpty_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsVerEmptyList) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsVerEmptyList) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mylist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerEmptyList) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsVerEmptyList) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mylist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerEmptyList) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsVerEmptyList_List C.PointerList
 
@@ -921,10 +5280,6 @@ func (s HoldsVerEmptyList_List) ToArray() []HoldsVerEmptyList {
 func (s HoldsVerEmptyList_List) Set(i int, item HoldsVerEmptyList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
-func (s HoldsVerEmptyList) String() string {
-	var r string
-	return r
-}
 
 type HoldsVerOneDataList C.Struct
 
@@ -944,9 +5299,106 @@ func (s HoldsVerOneDataList) Mylist() VerOneData_List {
 	return VerOneData_List(C.Struct(s).GetObject(0))
 }
 func (s HoldsVerOneDataList) SetMylist(v VerOneData_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsVerOneDataList) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsVerOneDataList) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mylist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerOneDataList) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsVerOneDataList) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mylist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerOneDataList) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsVerOneDataList_List C.PointerList
 
@@ -968,10 +5420,6 @@ func (s HoldsVerOneDataList_List) ToArray() []HoldsVerOneDataList {
 func (s HoldsVerOneDataList_List) Set(i int, item HoldsVerOneDataList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
-func (s HoldsVerOneDataList) String() string {
-	var r string
-	return r
-}
 
 type HoldsVerTwoDataList C.Struct
 
@@ -991,9 +5439,106 @@ func (s HoldsVerTwoDataList) Mylist() VerTwoData_List {
 	return VerTwoData_List(C.Struct(s).GetObject(0))
 }
 func (s HoldsVerTwoDataList) SetMylist(v VerTwoData_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsVerTwoDataList) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsVerTwoDataList) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mylist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoDataList) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsVerTwoDataList) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mylist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoDataList) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsVerTwoDataList_List C.PointerList
 
@@ -1015,10 +5560,6 @@ func (s HoldsVerTwoDataList_List) ToArray() []HoldsVerTwoDataList {
 func (s HoldsVerTwoDataList_List) Set(i int, item HoldsVerTwoDataList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
-func (s HoldsVerTwoDataList) String() string {
-	var r string
-	return r
-}
 
 type HoldsVerOnePtrList C.Struct
 
@@ -1036,9 +5577,106 @@ func ReadRootHoldsVerOnePtrList(s *C.Segment) HoldsVerOnePtrList {
 }
 func (s HoldsVerOnePtrList) Mylist() VerOnePtr_List     { return VerOnePtr_List(C.Struct(s).GetObject(0)) }
 func (s HoldsVerOnePtrList) SetMylist(v VerOnePtr_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsVerOnePtrList) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsVerOnePtrList) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mylist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerOnePtrList) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsVerOnePtrList) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mylist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerOnePtrList) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsVerOnePtrList_List C.PointerList
 
@@ -1060,10 +5698,6 @@ func (s HoldsVerOnePtrList_List) ToArray() []HoldsVerOnePtrList {
 func (s HoldsVerOnePtrList_List) Set(i int, item HoldsVerOnePtrList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
-func (s HoldsVerOnePtrList) String() string {
-	var r string
-	return r
-}
 
 type HoldsVerTwoPtrList C.Struct
 
@@ -1081,9 +5715,106 @@ func ReadRootHoldsVerTwoPtrList(s *C.Segment) HoldsVerTwoPtrList {
 }
 func (s HoldsVerTwoPtrList) Mylist() VerTwoPtr_List     { return VerTwoPtr_List(C.Struct(s).GetObject(0)) }
 func (s HoldsVerTwoPtrList) SetMylist(v VerTwoPtr_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsVerTwoPtrList) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsVerTwoPtrList) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mylist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoPtrList) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsVerTwoPtrList) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mylist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoPtrList) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsVerTwoPtrList_List C.PointerList
 
@@ -1105,10 +5836,6 @@ func (s HoldsVerTwoPtrList_List) ToArray() []HoldsVerTwoPtrList {
 func (s HoldsVerTwoPtrList_List) Set(i int, item HoldsVerTwoPtrList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
-func (s HoldsVerTwoPtrList) String() string {
-	var r string
-	return r
-}
 
 type HoldsVerTwoTwoList C.Struct
 
@@ -1128,9 +5855,106 @@ func (s HoldsVerTwoTwoList) Mylist() VerTwoDataTwoPtr_List {
 	return VerTwoDataTwoPtr_List(C.Struct(s).GetObject(0))
 }
 func (s HoldsVerTwoTwoList) SetMylist(v VerTwoDataTwoPtr_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsVerTwoTwoList) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsVerTwoTwoList) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mylist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoTwoList) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsVerTwoTwoList) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mylist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoTwoList) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsVerTwoTwoList_List C.PointerList
 
@@ -1152,10 +5976,6 @@ func (s HoldsVerTwoTwoList_List) ToArray() []HoldsVerTwoTwoList {
 func (s HoldsVerTwoTwoList_List) Set(i int, item HoldsVerTwoTwoList) {
 	C.PointerList(s).Set(i, C.Object(item))
 }
-func (s HoldsVerTwoTwoList) String() string {
-	var r string
-	return r
-}
 
 type HoldsVerTwoTwoPlus C.Struct
 
@@ -1175,9 +5995,106 @@ func (s HoldsVerTwoTwoPlus) Mylist() VerTwoTwoPlus_List {
 	return VerTwoTwoPlus_List(C.Struct(s).GetObject(0))
 }
 func (s HoldsVerTwoTwoPlus) SetMylist(v VerTwoTwoPlus_List) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsVerTwoTwoPlus) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsVerTwoTwoPlus) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mylist\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoTwoPlus) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsVerTwoTwoPlus) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mylist = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Mylist()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsVerTwoTwoPlus) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsVerTwoTwoPlus_List C.PointerList
 
@@ -1198,10 +6115,6 @@ func (s HoldsVerTwoTwoPlus_List) ToArray() []HoldsVerTwoTwoPlus {
 }
 func (s HoldsVerTwoTwoPlus_List) Set(i int, item HoldsVerTwoTwoPlus) {
 	C.PointerList(s).Set(i, C.Object(item))
-}
-func (s HoldsVerTwoTwoPlus) String() string {
-	var r string
-	return r
 }
 
 type VerTwoTwoPlus C.Struct
@@ -1226,9 +6139,288 @@ func (s VerTwoTwoPlus) Tre() int64                 { return int64(C.Struct(s).Ge
 func (s VerTwoTwoPlus) SetTre(v int64)             { C.Struct(s).Set64(16, uint64(v)) }
 func (s VerTwoTwoPlus) Lst3() C.Int64List          { return C.Int64List(C.Struct(s).GetObject(2)) }
 func (s VerTwoTwoPlus) SetLst3(v C.Int64List)      { C.Struct(s).SetObject(2, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VerTwoTwoPlus) MarshalJSON() (bs []byte, err error) { return }
+func (s VerTwoTwoPlus) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"val\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"duo\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Duo()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ptr1\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr1()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ptr2\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr2()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"tre\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Tre()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"lst3\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Lst3()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoTwoPlus) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VerTwoTwoPlus) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("val = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Val()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("duo = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Duo()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ptr1 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr1()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ptr2 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ptr2()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("tre = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Tre()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("lst3 = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Lst3()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VerTwoTwoPlus) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VerTwoTwoPlus_List C.PointerList
 
@@ -1248,10 +6440,6 @@ func (s VerTwoTwoPlus_List) ToArray() []VerTwoTwoPlus {
 	return a
 }
 func (s VerTwoTwoPlus_List) Set(i int, item VerTwoTwoPlus) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s VerTwoTwoPlus) String() string {
-	var r string
-	return r
-}
 
 type HoldsText C.Struct
 
@@ -1265,9 +6453,184 @@ func (s HoldsText) Lst() C.TextList            { return C.TextList(C.Struct(s).G
 func (s HoldsText) SetLst(v C.TextList)        { C.Struct(s).SetObject(1, C.Object(v)) }
 func (s HoldsText) Lstlst() C.PointerList      { return C.PointerList(C.Struct(s).GetObject(2)) }
 func (s HoldsText) SetLstlst(v C.PointerList)  { C.Struct(s).SetObject(2, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s HoldsText) MarshalJSON() (bs []byte, err error) { return }
+func (s HoldsText) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"txt\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Txt()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"lst\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Lst()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"lstlst\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Lstlst()
+		_ = s
+		_, err = b.WriteString("\"untyped list\"")
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsText) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s HoldsText) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("txt = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Txt()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("lst = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Lst()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("lstlst = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Lstlst()
+		_ = s
+		_, err = b.WriteString("\"untyped list\"")
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s HoldsText) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type HoldsText_List C.PointerList
 
@@ -1285,10 +6648,6 @@ func (s HoldsText_List) ToArray() []HoldsText {
 	return a
 }
 func (s HoldsText_List) Set(i int, item HoldsText) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s HoldsText) String() string {
-	var r string
-	return r
-}
 
 type WrapEmpty C.Struct
 
@@ -1300,9 +6659,70 @@ func (s WrapEmpty) MightNotBeReallyEmpty() VerEmpty {
 	return VerEmpty(C.Struct(s).GetObject(0).ToStruct())
 }
 func (s WrapEmpty) SetMightNotBeReallyEmpty(v VerEmpty) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s WrapEmpty) MarshalJSON() (bs []byte, err error) { return }
+func (s WrapEmpty) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MightNotBeReallyEmpty()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s WrapEmpty) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s WrapEmpty) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mightNotBeReallyEmpty = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MightNotBeReallyEmpty()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s WrapEmpty) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type WrapEmpty_List C.PointerList
 
@@ -1320,10 +6740,6 @@ func (s WrapEmpty_List) ToArray() []WrapEmpty {
 	return a
 }
 func (s WrapEmpty_List) Set(i int, item WrapEmpty) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s WrapEmpty) String() string {
-	var r string
-	return r
-}
 
 type Wrap2x2 C.Struct
 
@@ -1335,9 +6751,70 @@ func (s Wrap2x2) MightNotBeReallyEmpty() VerTwoDataTwoPtr {
 	return VerTwoDataTwoPtr(C.Struct(s).GetObject(0).ToStruct())
 }
 func (s Wrap2x2) SetMightNotBeReallyEmpty(v VerTwoDataTwoPtr) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Wrap2x2) MarshalJSON() (bs []byte, err error) { return }
+func (s Wrap2x2) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MightNotBeReallyEmpty()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Wrap2x2) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Wrap2x2) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mightNotBeReallyEmpty = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MightNotBeReallyEmpty()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Wrap2x2) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Wrap2x2_List C.PointerList
 
@@ -1355,10 +6832,6 @@ func (s Wrap2x2_List) ToArray() []Wrap2x2 {
 	return a
 }
 func (s Wrap2x2_List) Set(i int, item Wrap2x2) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Wrap2x2) String() string {
-	var r string
-	return r
-}
 
 type Wrap2x2plus C.Struct
 
@@ -1370,9 +6843,70 @@ func (s Wrap2x2plus) MightNotBeReallyEmpty() VerTwoTwoPlus {
 	return VerTwoTwoPlus(C.Struct(s).GetObject(0).ToStruct())
 }
 func (s Wrap2x2plus) SetMightNotBeReallyEmpty(v VerTwoTwoPlus) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Wrap2x2plus) MarshalJSON() (bs []byte, err error) { return }
+func (s Wrap2x2plus) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MightNotBeReallyEmpty()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Wrap2x2plus) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Wrap2x2plus) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("mightNotBeReallyEmpty = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.MightNotBeReallyEmpty()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Wrap2x2plus) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Wrap2x2plus_List C.PointerList
 
@@ -1390,10 +6924,6 @@ func (s Wrap2x2plus_List) ToArray() []Wrap2x2plus {
 	return a
 }
 func (s Wrap2x2plus_List) Set(i int, item Wrap2x2plus) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Wrap2x2plus) String() string {
-	var r string
-	return r
-}
 
 type Endpoint C.Struct
 
@@ -1407,9 +6937,154 @@ func (s Endpoint) Port() int16               { return int16(C.Struct(s).Get16(0)
 func (s Endpoint) SetPort(v int16)           { C.Struct(s).Set16(0, uint16(v)) }
 func (s Endpoint) Hostname() string          { return C.Struct(s).GetObject(1).ToText() }
 func (s Endpoint) SetHostname(v string)      { C.Struct(s).SetObject(1, s.Segment.NewText(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Endpoint) MarshalJSON() (bs []byte, err error) { return }
+func (s Endpoint) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"ip\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ip()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"port\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Port()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"hostname\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Hostname()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Endpoint) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Endpoint) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("ip = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Ip()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("port = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Port()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("hostname = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Hostname()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Endpoint) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Endpoint_List C.PointerList
 
@@ -1427,10 +7102,6 @@ func (s Endpoint_List) ToArray() []Endpoint {
 	return a
 }
 func (s Endpoint_List) Set(i int, item Endpoint) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Endpoint) String() string {
-	var r string
-	return r
-}
 
 type VoidUnion C.Struct
 type VoidUnion_Which uint16
@@ -1447,9 +7118,100 @@ func ReadRootVoidUnion(s *C.Segment) VoidUnion { return VoidUnion(s.Root(0).ToSt
 func (s VoidUnion) Which() VoidUnion_Which     { return VoidUnion_Which(C.Struct(s).Get16(0)) }
 func (s VoidUnion) SetA()                      { C.Struct(s).Set16(0, 0) }
 func (s VoidUnion) SetB()                      { C.Struct(s).Set16(0, 1) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s VoidUnion) MarshalJSON() (bs []byte, err error) { return }
+func (s VoidUnion) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	if s.Which() == VOIDUNION_A {
+		_, err = b.WriteString("\"a\":")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	if s.Which() == VOIDUNION_B {
+		err = b.WriteByte(',')
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"b\":")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VoidUnion) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s VoidUnion) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	if s.Which() == VOIDUNION_A {
+		_, err = b.WriteString("a = ")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	if s.Which() == VOIDUNION_B {
+		_, err = b.WriteString(", ")
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("b = ")
+		if err != nil {
+			return err
+		}
+		_ = s
+		_, err = b.WriteString("null")
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s VoidUnion) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type VoidUnion_List C.PointerList
 
@@ -1467,10 +7229,6 @@ func (s VoidUnion_List) ToArray() []VoidUnion {
 	return a
 }
 func (s VoidUnion_List) Set(i int, item VoidUnion) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s VoidUnion) String() string {
-	var r string
-	return r
-}
 
 type Nester1Capn C.Struct
 
@@ -1480,9 +7238,114 @@ func AutoNewNester1Capn(s *C.Segment) Nester1Capn  { return Nester1Capn(s.NewStr
 func ReadRootNester1Capn(s *C.Segment) Nester1Capn { return Nester1Capn(s.Root(0).ToStruct()) }
 func (s Nester1Capn) Strs() C.TextList             { return C.TextList(C.Struct(s).GetObject(0)) }
 func (s Nester1Capn) SetStrs(v C.TextList)         { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s Nester1Capn) MarshalJSON() (bs []byte, err error) { return }
+func (s Nester1Capn) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"strs\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Strs()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Nester1Capn) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s Nester1Capn) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("strs = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Strs()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s Nester1Capn) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type Nester1Capn_List C.PointerList
 
@@ -1500,10 +7363,6 @@ func (s Nester1Capn_List) ToArray() []Nester1Capn {
 	return a
 }
 func (s Nester1Capn_List) Set(i int, item Nester1Capn) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s Nester1Capn) String() string {
-	var r string
-	return r
-}
 
 type RWTestCapn C.Struct
 
@@ -1513,9 +7372,72 @@ func AutoNewRWTestCapn(s *C.Segment) RWTestCapn    { return RWTestCapn(s.NewStru
 func ReadRootRWTestCapn(s *C.Segment) RWTestCapn   { return RWTestCapn(s.Root(0).ToStruct()) }
 func (s RWTestCapn) NestMatrix() C.PointerList     { return C.PointerList(C.Struct(s).GetObject(0)) }
 func (s RWTestCapn) SetNestMatrix(v C.PointerList) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s RWTestCapn) MarshalJSON() (bs []byte, err error) { return }
+func (s RWTestCapn) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"nestMatrix\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.NestMatrix()
+		_ = s
+		_, err = b.WriteString("\"untyped list\"")
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s RWTestCapn) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s RWTestCapn) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("nestMatrix = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.NestMatrix()
+		_ = s
+		_, err = b.WriteString("\"untyped list\"")
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s RWTestCapn) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type RWTestCapn_List C.PointerList
 
@@ -1533,10 +7455,6 @@ func (s RWTestCapn_List) ToArray() []RWTestCapn {
 	return a
 }
 func (s RWTestCapn_List) Set(i int, item RWTestCapn) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s RWTestCapn) String() string {
-	var r string
-	return r
-}
 
 type ListStructCapn C.Struct
 
@@ -1546,9 +7464,106 @@ func AutoNewListStructCapn(s *C.Segment) ListStructCapn  { return ListStructCapn
 func ReadRootListStructCapn(s *C.Segment) ListStructCapn { return ListStructCapn(s.Root(0).ToStruct()) }
 func (s ListStructCapn) Vec() Nester1Capn_List           { return Nester1Capn_List(C.Struct(s).GetObject(0)) }
 func (s ListStructCapn) SetVec(v Nester1Capn_List)       { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s ListStructCapn) MarshalJSON() (bs []byte, err error) { return }
+func (s ListStructCapn) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"vec\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Vec()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s ListStructCapn) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s ListStructCapn) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("vec = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Vec()
+		{
+			err = b.WriteByte('[')
+			if err != nil {
+				return err
+			}
+			for i, s := range s.ToArray() {
+				if i != 0 {
+					_, err = b.WriteString(", ")
+				}
+				if err != nil {
+					return err
+				}
+				err = s.WriteCapLit(b)
+				if err != nil {
+					return err
+				}
+			}
+			err = b.WriteByte(']')
+		}
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s ListStructCapn) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type ListStructCapn_List C.PointerList
 
@@ -1568,10 +7583,6 @@ func (s ListStructCapn_List) ToArray() []ListStructCapn {
 	return a
 }
 func (s ListStructCapn_List) Set(i int, item ListStructCapn) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s ListStructCapn) String() string {
-	var r string
-	return r
-}
 
 type StackingRoot C.Struct
 
@@ -1585,9 +7596,100 @@ func (s StackingRoot) AWithDefault() StackingA {
 	return StackingA(C.Struct(s).GetObject(0).ToStructDefault(x_832bcc6686a26d56, 0))
 }
 func (s StackingRoot) SetAWithDefault(v StackingA) { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s StackingRoot) MarshalJSON() (bs []byte, err error) { return }
+func (s StackingRoot) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"a\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.A()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"aWithDefault\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.AWithDefault()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s StackingRoot) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s StackingRoot) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("a = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.A()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("aWithDefault = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.AWithDefault()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s StackingRoot) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type StackingRoot_List C.PointerList
 
@@ -1607,10 +7709,6 @@ func (s StackingRoot_List) ToArray() []StackingRoot {
 	return a
 }
 func (s StackingRoot_List) Set(i int, item StackingRoot) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s StackingRoot) String() string {
-	var r string
-	return r
-}
 
 type StackingA C.Struct
 
@@ -1622,9 +7720,108 @@ func (s StackingA) Num() int32                 { return int32(C.Struct(s).Get32(
 func (s StackingA) SetNum(v int32)             { C.Struct(s).Set32(0, uint32(v)) }
 func (s StackingA) B() StackingB               { return StackingB(C.Struct(s).GetObject(0).ToStruct()) }
 func (s StackingA) SetB(v StackingB)           { C.Struct(s).SetObject(0, C.Object(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s StackingA) MarshalJSON() (bs []byte, err error) { return }
+func (s StackingA) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"num\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Num()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(',')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"b\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.B()
+		err = s.WriteJSON(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s StackingA) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s StackingA) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("num = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Num()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = b.WriteString(", ")
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("b = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.B()
+		err = s.WriteCapLit(b)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s StackingA) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type StackingA_List C.PointerList
 
@@ -1642,10 +7839,6 @@ func (s StackingA_List) ToArray() []StackingA {
 	return a
 }
 func (s StackingA_List) Set(i int, item StackingA) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s StackingA) String() string {
-	var r string
-	return r
-}
 
 type StackingB C.Struct
 
@@ -1655,9 +7848,78 @@ func AutoNewStackingB(s *C.Segment) StackingB  { return StackingB(s.NewStructAR(
 func ReadRootStackingB(s *C.Segment) StackingB { return StackingB(s.Root(0).ToStruct()) }
 func (s StackingB) Num() int32                 { return int32(C.Struct(s).Get32(0)) }
 func (s StackingB) SetNum(v int32)             { C.Struct(s).Set32(0, uint32(v)) }
-
-// capn.JSON_enabled == false so we stub MarshallJSON().
-func (s StackingB) MarshalJSON() (bs []byte, err error) { return }
+func (s StackingB) WriteJSON(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('{')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("\"num\":")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Num()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte('}')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s StackingB) MarshalJSON() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteJSON(&b)
+	return b.Bytes(), err
+}
+func (s StackingB) WriteCapLit(w io.Writer) error {
+	b := bufio.NewWriter(w)
+	var err error
+	var buf []byte
+	_ = buf
+	err = b.WriteByte('(')
+	if err != nil {
+		return err
+	}
+	_, err = b.WriteString("num = ")
+	if err != nil {
+		return err
+	}
+	{
+		s := s.Num()
+		buf, err = json.Marshal(s)
+		if err != nil {
+			return err
+		}
+		_, err = b.Write(buf)
+		if err != nil {
+			return err
+		}
+	}
+	err = b.WriteByte(')')
+	if err != nil {
+		return err
+	}
+	err = b.Flush()
+	return err
+}
+func (s StackingB) MarshalCapLit() ([]byte, error) {
+	b := bytes.Buffer{}
+	err := s.WriteCapLit(&b)
+	return b.Bytes(), err
+}
 
 type StackingB_List C.PointerList
 
@@ -1675,10 +7937,6 @@ func (s StackingB_List) ToArray() []StackingB {
 	return a
 }
 func (s StackingB_List) Set(i int, item StackingB) { C.PointerList(s).Set(i, C.Object(item)) }
-func (s StackingB) String() string {
-	var r string
-	return r
-}
 
 var x_832bcc6686a26d56 = C.NewBuffer([]byte{
 	0, 0, 0, 0, 1, 0, 1, 0,
