@@ -351,6 +351,7 @@ func (s Airport_List) ToArray() []Airport {
 	}
 	return a
 }
+func (s Airport_List) Set(i int, item Airport) { C.UInt16List(s).Set(i, uint16(item)) }
 func (s Airport) WriteJSON(w io.Writer) error {
 	b := bufio.NewWriter(w)
 	var err error

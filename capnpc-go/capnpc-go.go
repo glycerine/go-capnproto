@@ -198,6 +198,7 @@ func (n *node) defineEnum(w io.Writer) {
 	fprintf(w, "\ta := make([]%s, n)\n", n.name)
 	fprintf(w, "\tfor i := 0; i < n; i++ { a[i] = s.At(i) }\n")
 	fprintf(w, "\treturn a\n}\n")
+	fprintf(w, "func (s %s_List) Set(i int, item %s) { C.UInt16List(s).Set(i, uint16(item)) }\n", n.name, n.name)
 }
 
 func (n *node) writeValue(w io.Writer, t Type, v Value) {
