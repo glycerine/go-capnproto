@@ -46,13 +46,13 @@ func (n *node) caplitStruct(w io.Writer) {
 		if f.DiscriminantValue() != 0xFFFF {
 			enumname := fmt.Sprintf("%s_%s", strings.ToUpper(n.name), strings.ToUpper(f.Name()))
 			fprintf(w, "if s.Which() == %s {", enumname)
-		}
-		if i != 0 {
+		} else if i != 0 {
 			fprintf(w, `
-				_, err = b.WriteString(", ");
-			`)
+					_, err = b.WriteString(", ");
+				`)
 			writeErrCheck(w)
 		}
+
 		fprintf(w, `_, err = b.WriteString("%s = ");`, f.Name())
 		writeErrCheck(w)
 		f.caplit(w)
