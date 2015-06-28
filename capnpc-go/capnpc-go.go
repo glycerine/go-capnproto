@@ -817,8 +817,7 @@ func (n *node) jsonStruct(w io.Writer) {
 		if f.DiscriminantValue() != 0xFFFF {
 			enumname := fmt.Sprintf("%s_%s", strings.ToUpper(n.name), strings.ToUpper(f.Name()))
 			fprintf(w, "if s.Which() == %s {", enumname)
-		}
-		if i != 0 {
+		} else if i != 0 {
 			fprintf(w, `
 				err = b.WriteByte(',');
 			`)

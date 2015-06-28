@@ -16,6 +16,7 @@ func TestPrint(t *testing.T) {
 	b737 := air.AutoNewB737(seg)
 	base := air.AutoNewPlaneBase(seg)
 	base.SetName("helen")
+	base.SetMaxSpeed(0.5)
 	homes := air.NewAirportList(seg, 2)
 	homes.Set(0, air.AIRPORT_JFK)
 	homes.Set(1, air.AIRPORT_SFO)
@@ -23,11 +24,14 @@ func TestPrint(t *testing.T) {
 	b737.SetBase(base)
 	airc.SetB737(b737)
 	z.SetAircraft(airc)
-	j, err := z.MarshalCapLit()
+	lit, err := z.MarshalCapLit()
+	panicOn(err)
+	json, err := z.MarshalJSON()
 	panicOn(err)
 
-	cv.Convey("Given the aircraftlib schema (and an Aircraft value), we should generate a MarshalCapLit() function that returns a literal representation in bytes for the given Aircraft value ", t, func() {
-		cv.So(string(j), cv.ShouldEqual, `(aircraft = (b737 = (base = (name = "helen", homes = [], rating = 0, canFly = false, capacity = 0, maxSpeed = 0))))`)
+	cv.Convey("Given the aircraftlib schema (and an Aircraft value), we should generate a MarshalCapLit() function that returns a literal representation in bytes for the given Aircraft value. And the MarshalJSON() should return the expected format too.", t, func() {
+		cv.So(string(lit), cv.ShouldEqual, `(aircraft = (b737 = (base = (name = "helen", homes = [jfk, sfo], rating = 0, canFly = false, capacity = 0, maxSpeed = 0.5))))`)
+		cv.So(string(json), cv.ShouldEqual, `{"aircraft":{"b737":{"base":{"name":"helen","homes":["jfk", "sfo"],"rating":0,"canFly":false,"capacity":0,"maxSpeed":0.5}}}}`)
 	})
 
 }

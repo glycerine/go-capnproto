@@ -1378,10 +1378,6 @@ func (s Aircraft) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == AIRCRAFT_B737 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"b737\":")
 		if err != nil {
 			return err
@@ -1395,10 +1391,6 @@ func (s Aircraft) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == AIRCRAFT_A320 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"a320\":")
 		if err != nil {
 			return err
@@ -1412,10 +1404,6 @@ func (s Aircraft) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == AIRCRAFT_F16 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"f16\":")
 		if err != nil {
 			return err
@@ -1689,10 +1677,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_ZZ {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"zz\":")
 		if err != nil {
 			return err
@@ -1706,10 +1690,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_F64 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"f64\":")
 		if err != nil {
 			return err
@@ -1727,10 +1707,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_F32 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"f32\":")
 		if err != nil {
 			return err
@@ -1748,10 +1724,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I64 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i64\":")
 		if err != nil {
 			return err
@@ -1769,10 +1741,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I32 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i32\":")
 		if err != nil {
 			return err
@@ -1790,10 +1758,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I16 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i16\":")
 		if err != nil {
 			return err
@@ -1811,10 +1775,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I8 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i8\":")
 		if err != nil {
 			return err
@@ -1832,10 +1792,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U64 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u64\":")
 		if err != nil {
 			return err
@@ -1853,10 +1809,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U32 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u32\":")
 		if err != nil {
 			return err
@@ -1874,10 +1826,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U16 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u16\":")
 		if err != nil {
 			return err
@@ -1895,10 +1843,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U8 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u8\":")
 		if err != nil {
 			return err
@@ -1916,10 +1860,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_BOOL {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"bool\":")
 		if err != nil {
 			return err
@@ -1937,10 +1877,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_TEXT {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"text\":")
 		if err != nil {
 			return err
@@ -1958,10 +1894,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_BLOB {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"blob\":")
 		if err != nil {
 			return err
@@ -1979,10 +1911,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_F64VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"f64vec\":")
 		if err != nil {
 			return err
@@ -2018,10 +1946,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_F32VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"f32vec\":")
 		if err != nil {
 			return err
@@ -2057,10 +1981,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I64VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i64vec\":")
 		if err != nil {
 			return err
@@ -2096,10 +2016,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I32VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i32vec\":")
 		if err != nil {
 			return err
@@ -2135,10 +2051,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I16VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i16vec\":")
 		if err != nil {
 			return err
@@ -2174,10 +2086,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_I8VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"i8vec\":")
 		if err != nil {
 			return err
@@ -2213,10 +2121,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U64VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u64vec\":")
 		if err != nil {
 			return err
@@ -2252,10 +2156,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U32VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u32vec\":")
 		if err != nil {
 			return err
@@ -2291,10 +2191,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U16VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u16vec\":")
 		if err != nil {
 			return err
@@ -2330,10 +2226,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_U8VEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"u8vec\":")
 		if err != nil {
 			return err
@@ -2369,10 +2261,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_ZVEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"zvec\":")
 		if err != nil {
 			return err
@@ -2404,10 +2292,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_ZVECVEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"zvecvec\":")
 		if err != nil {
 			return err
@@ -2422,10 +2306,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_ZDATE {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"zdate\":")
 		if err != nil {
 			return err
@@ -2439,10 +2319,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_ZDATA {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"zdata\":")
 		if err != nil {
 			return err
@@ -2456,10 +2332,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_AIRCRAFTVEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"aircraftvec\":")
 		if err != nil {
 			return err
@@ -2491,10 +2363,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_AIRCRAFT {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"aircraft\":")
 		if err != nil {
 			return err
@@ -2508,10 +2376,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_REGRESSION {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"regression\":")
 		if err != nil {
 			return err
@@ -2525,10 +2389,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_PLANEBASE {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"planebase\":")
 		if err != nil {
 			return err
@@ -2542,10 +2402,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_AIRPORT {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"airport\":")
 		if err != nil {
 			return err
@@ -2559,10 +2415,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_B737 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"b737\":")
 		if err != nil {
 			return err
@@ -2576,10 +2428,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_A320 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"a320\":")
 		if err != nil {
 			return err
@@ -2593,10 +2441,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_F16 {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"f16\":")
 		if err != nil {
 			return err
@@ -2610,10 +2454,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_ZDATEVEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"zdatevec\":")
 		if err != nil {
 			return err
@@ -2645,10 +2485,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_ZDATAVEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"zdatavec\":")
 		if err != nil {
 			return err
@@ -2680,10 +2516,6 @@ func (s Z) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == Z_BOOLVEC {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"boolvec\":")
 		if err != nil {
 			return err
@@ -6972,10 +6804,6 @@ func (s VoidUnion) WriteJSON(w io.Writer) error {
 		}
 	}
 	if s.Which() == VOIDUNION_B {
-		err = b.WriteByte(',')
-		if err != nil {
-			return err
-		}
 		_, err = b.WriteString("\"b\":")
 		if err != nil {
 			return err
