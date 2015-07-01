@@ -1486,3 +1486,8 @@ func ListCString(val uint64) string {
 func ListD(val uint64) int {
 	return int(uint32(val >> 35))
 }
+
+// For manually copying between segments. Not typically needed.
+func CopyToFrom(dest, src Object) error {
+	return copyStructHandlingVersionSkew(dest, src, nil, 0, 0, 0)
+}
