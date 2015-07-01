@@ -5,8 +5,8 @@ prepare:
 	go install ./capnpc-go
 	cd aircraftlib; make
 	which capnpc-go
+	# if there was a diff below, adjust your PATH to use the most-recently build capnpc-go
 	diff `which capnpc-go` ./capnpc-go/capnpc-go
-	# if there was a diff above, adjust your PATH to use the most-recently build capnpc-go
 
 
 check:
