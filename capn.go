@@ -1436,10 +1436,11 @@ func (destSeg *Segment) writePtr(off int, src Object, copies *rbtree.Tree, depth
 			}
 		}
 
-		binary.LittleEndian.PutUint64(t.Data[len(t.Data):], srcSeg.farPtrValue(farPointer, src.off))
-		binary.LittleEndian.PutUint64(t.Data[len(t.Data)+8:], src.value(src.off-8))
+		l := len(t.Data)+16
+		binary.LittleEndian.PutUint64(t.Data[len(t.Data):l], srcSeg.farPtrValue(farPointer, src.off))
+		binary.LittleEndian.PutUint64(t.Data[len(t.Data)+8:l], src.value(src.off-8))
 		binary.LittleEndian.PutUint64(destSeg.Data[off:], t.farPtrValue(doubleFarPointer, len(t.Data)))
-		t.Data = t.Data[:len(t.Data)+16]
+		t.Data = t.Data[:l]
 		return nil
 	}
 }
