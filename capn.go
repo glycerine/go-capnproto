@@ -1418,11 +1418,11 @@ func (destSeg *Segment) writePtr(off int, src Object, copies *rbtree.Tree, depth
 		binary.LittleEndian.PutUint64(destSeg.Data[off:], srcSeg.farPtrValue(farPointer, src.off-8))
 		return nil
 
-	} else if len(srcSeg.Data)+8 <= cap(srcSeg.Data) {
+	} else if l := len(srcSeg.Data)+8; l <= cap(srcSeg.Data) {
 		// Have room in the target for a tag
-		binary.LittleEndian.PutUint64(srcSeg.Data[len(srcSeg.Data):], src.value(len(srcSeg.Data)))
+		binary.LittleEndian.PutUint64(srcSeg.Data[len(srcSeg.Data):l], src.value(len(srcSeg.Data)))
 		binary.LittleEndian.PutUint64(destSeg.Data[off:], srcSeg.farPtrValue(farPointer, len(srcSeg.Data)))
-		srcSeg.Data = srcSeg.Data[:len(srcSeg.Data)+8]
+		srcSeg.Data = srcSeg.Data[:l]
 		return nil
 
 	} else {
