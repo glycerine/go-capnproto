@@ -784,8 +784,9 @@ func (p PointerList) ToArray() *[]Object {
 	return &v
 }
 
-func (p TextList) At(i int) string { return PointerList(p).At(i).ToText() }
-func (p DataList) At(i int) []byte { return PointerList(p).At(i).ToData() }
+func (p TextList) At(i int) string        { return PointerList(p).At(i).ToText() }
+func (p TextList) AtAsBytes(i int) []byte { return PointerList(p).At(i).ToData() }
+func (p DataList) At(i int) []byte        { return PointerList(p).At(i).ToData() }
 func (p PointerList) At(i int) Object {
 	if i < 0 || i >= p.length {
 		return Object{}
@@ -1418,7 +1419,7 @@ func (destSeg *Segment) writePtr(off int, src Object, copies *rbtree.Tree, depth
 		binary.LittleEndian.PutUint64(destSeg.Data[off:], srcSeg.farPtrValue(farPointer, src.off-8))
 		return nil
 
-	} else if l := len(srcSeg.Data)+8; l <= cap(srcSeg.Data) {
+	} else if l := len(srcSeg.Data) + 8; l <= cap(srcSeg.Data) {
 		// Have room in the target for a tag
 		binary.LittleEndian.PutUint64(srcSeg.Data[len(srcSeg.Data):l], src.value(len(srcSeg.Data)))
 		binary.LittleEndian.PutUint64(destSeg.Data[off:], srcSeg.farPtrValue(farPointer, len(srcSeg.Data)))
@@ -1436,7 +1437,7 @@ func (destSeg *Segment) writePtr(off int, src Object, copies *rbtree.Tree, depth
 			}
 		}
 
-		l := len(t.Data)+16
+		l := len(t.Data) + 16
 		binary.LittleEndian.PutUint64(t.Data[len(t.Data):l], srcSeg.farPtrValue(farPointer, src.off))
 		binary.LittleEndian.PutUint64(t.Data[len(t.Data)+8:l], src.value(src.off-8))
 		binary.LittleEndian.PutUint64(destSeg.Data[off:], t.farPtrValue(doubleFarPointer, len(t.Data)))
