@@ -1,11 +1,11 @@
 .PHONY: prepare
 
 prepare:
-	cd capnpc-go; go build
+	cd capnpc-go; go install && go build
 	go install ./capnpc-go
 	cd aircraftlib; make
 	which capnpc-go
-	# if there was a diff below, adjust your PATH to use the most-recently build capnpc-go
+	# if there is a diff below, adjust your PATH to use the most-recently built capnpc-go
 	diff `which capnpc-go` ./capnpc-go/capnpc-go
 
 

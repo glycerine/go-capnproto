@@ -51,21 +51,21 @@ func (b *buffer) Lookup(segid uint32) (*Segment, error) {
 	}
 }
 
-type multiBuffer struct {
-	segments []*Segment
+type MultiBuffer struct {
+	Segments []*Segment
 }
 
-// NewmultiBuffer creates a new multi segment message. Creating new objects
+// NewMultiBuffer creates a new multi segment message. Creating new objects
 // will try and reuse the buffers available, but will create new ones if there
 // is insufficient capacity. When parsing an existing message data should be
 // the list of segments. The data buffers will not be copied.
-func NewmultiBuffer(data [][]byte) *Segment {
-	m := &multiBuffer{make([]*Segment, len(data))}
+func NewMultiBuffer(data [][]byte) *Segment {
+	m := &MultiBuffer{make([]*Segment, len(data))}
 	for i, d := range data {
-		m.segments[i] = &Segment{m, d, uint32(i), false}
+		m.Segments[i] = &Segment{m, d, uint32(i), false}
 	}
 	if len(data) > 0 {
-		return m.segments[0]
+		return m.Segments[0]
 	}
 	return &Segment{Message: m, Data: nil, Id: 0xFFFFFFFF, RootDone: false}
 }
@@ -75,8 +75,8 @@ var (
 	MaxTotalSize     = 1024 * 1024 * 1024
 )
 
-func (m *multiBuffer) NewSegment(minsz int) (*Segment, error) {
-	for _, s := range m.segments {
+func (m *MultiBuffer) NewSegment(minsz int) (*Segment, error) {
+	for _, s := range m.Segments {
 		if len(s.Data)+minsz <= cap(s.Data) {
 			return s, nil
 		}
@@ -85,14 +85,14 @@ func (m *multiBuffer) NewSegment(minsz int) (*Segment, error) {
 	if minsz < 4096 {
 		minsz = 4096
 	}
-	s := &Segment{m, make([]byte, 0, minsz), uint32(len(m.segments)), false}
-	m.segments = append(m.segments, s)
+	s := &Segment{m, make([]byte, 0, minsz), uint32(len(m.Segments)), false}
+	m.Segments = append(m.Segments, s)
 	return s, nil
 }
 
-func (m *multiBuffer) Lookup(segid uint32) (*Segment, error) {
-	if uint(segid) < uint(len(m.segments)) {
-		return m.segments[segid], nil
+func (m *MultiBuffer) Lookup(segid uint32) (*Segment, error) {
+	if uint(segid) < uint(len(m.Segments)) {
+		return m.Segments[segid], nil
 	} else {
 		return nil, ErrInvalidSegment
 	}
@@ -153,14 +153,14 @@ func ReadFromStream(r io.Reader, buf *bytes.Buffer) (*Segment, error) {
 		return NewBuffer(datav[:sz]), nil
 	}
 
-	m := &multiBuffer{make([]*Segment, segnum)}
+	m := &MultiBuffer{make([]*Segment, segnum)}
 	for i := 0; i < segnum; i++ {
 		sz := int(binary.LittleEndian.Uint32(hdrv[4*i:])) * 8
-		m.segments[i] = &Segment{m, datav[:sz], uint32(i), false}
+		m.Segments[i] = &Segment{m, datav[:sz], uint32(i), false}
 		datav = datav[sz:]
 	}
 
-	return m.segments[0], nil
+	return m.Segments[0], nil
 }
 
 // ReadFromMemoryZeroCopy: like ReadFromStream, but reads a non-packed
@@ -199,14 +199,83 @@ func ReadFromMemoryZeroCopy(data []byte) (seg *Segment, bytesRead int64, err err
 
 	hdrv := data[4:(hdrsz + 4)]
 	datav := data[hdrsz+4:]
-	m := &multiBuffer{make([]*Segment, segnum)}
+	m := &MultiBuffer{make([]*Segment, segnum)}
 	for i := 0; i < segnum; i++ {
 		sz := int(binary.LittleEndian.Uint32(hdrv[4*i:])) * 8
-		m.segments[i] = &Segment{m, datav[:sz], uint32(i), false}
+		m.Segments[i] = &Segment{m, datav[:sz], uint32(i), false}
 		datav = datav[sz:]
 	}
 
-	return m.segments[0], int64(4 + hdrsz + total), nil
+	return m.Segments[0], int64(4 + hdrsz + total), nil
+}
+
+func NewSingleSegmentMultiBuffer() *MultiBuffer {
+	m := &MultiBuffer{make([]*Segment, 1)}
+	m.Segments[0] = &Segment{}
+	return m
+}
+
+// ReadFromMemoryZeroCopyNoAlloc: like ReadFromMemoryZeroCopy,
+// but avoid all allocations so we get zero GC pressure.
+//
+// This requires some strict but easy to meet pre-requisites:
+//
+// PRE: the capnp bytes in data must come from only one segment. Else we panic.
+// PRE: multi must point to an existing MultiBuffer that has exactly one Segment
+//      that will be re-used and over-written. If in doubt,
+//      you can allocate a correct new one the first time
+//      by calling NewSingleSegmentMultiBuffer().
+//
+func ReadFromMemoryZeroCopyNoAlloc(data []byte, multi *MultiBuffer) (bytesRead int64, err error) {
+
+	if len(data) < 4 {
+		return 0, io.EOF
+	}
+
+	if binary.LittleEndian.Uint32(data[0:4]) >= uint32(MaxSegmentNumber) {
+		return 0, ErrTooMuchData
+	}
+
+	segnum := int(binary.LittleEndian.Uint32(data[0:4]) + 1)
+	if segnum != 1 {
+		panic("only one segment allowed in data read in with ReadFromMemoryZeroCopyNoAlloc()")
+	}
+	if multi == nil {
+		panic("multi must point to an existing MultiBuffer with a single Segment")
+	}
+	if len(multi.Segments) != 1 {
+		panic("only one segment allowed in the multi *MultiBuffer used in ReadFromMemoryZeroCopyNoAlloc()")
+	}
+	if multi.Segments[0] == nil {
+		panic("multi.Segment[0] must point to an allocated Segment{} to be resused in ReadFromMemoryZeroCopyNoAlloc()")
+	}
+	hdrsz := 8*(segnum/2) + 4
+
+	b := data[0:(hdrsz + 4)]
+
+	total := 0
+	for i := 0; i < segnum; i++ {
+		sz := binary.LittleEndian.Uint32(b[4*i+4:])
+		if uint64(total)+uint64(sz)*8 > uint64(MaxTotalSize) {
+			return 0, ErrTooMuchData
+		}
+		total += int(sz) * 8
+	}
+	if total == 0 {
+		return 0, io.EOF
+	}
+
+	hdrv := data[4:(hdrsz + 4)]
+	datav := data[hdrsz+4:]
+	sz := int(binary.LittleEndian.Uint32(hdrv)) * 8
+	seg := multi.Segments[0]
+	seg.Message = multi
+	seg.Data = datav[:sz]
+	seg.Id = 0
+	seg.RootDone = false
+	datav = datav[sz:]
+
+	return int64(4 + hdrsz + total), nil
 }
 
 // WriteTo writes the message that the segment is part of to the
