@@ -366,6 +366,15 @@ func (p Object) ToDataDefault(def []byte) []byte {
 	return p.Segment.Data[p.off : p.off+p.length]
 }
 
+func (p Object) ToDataTrimLastByte() []byte { return p.ToDataDefaultTrimLastByte(nil) }
+func (p Object) ToDataDefaultTrimLastByte(def []byte) []byte {
+	if p.typ != TypeList || p.datasz != 1 || p.length == 0 || p.Segment.Data[p.off+p.length-1] != 0 {
+		return def
+	}
+
+	return p.Segment.Data[p.off : p.off+p.length-1]
+}
+
 // There is no need to check the object type for lists as:
 // 1. Its a list (TypeList, TypeBitList, TypePointerList)
 // 2. Its TypeStruct, but then the length is 0
@@ -785,7 +794,7 @@ func (p PointerList) ToArray() *[]Object {
 }
 
 func (p TextList) At(i int) string        { return PointerList(p).At(i).ToText() }
-func (p TextList) AtAsBytes(i int) []byte { return PointerList(p).At(i).ToData() }
+func (p TextList) AtAsBytes(i int) []byte { return PointerList(p).At(i).ToDataDefaultTrimLastByte(nil) }
 func (p DataList) At(i int) []byte        { return PointerList(p).At(i).ToData() }
 func (p PointerList) At(i int) Object {
 	if i < 0 || i >= p.length {

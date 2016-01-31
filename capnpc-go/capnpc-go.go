@@ -551,8 +551,10 @@ func (n *node) defineField(w io.Writer, f Field) {
 		fprintf(&s, "(v string) {%s C.Struct(s).SetObject(%d, s.Segment.NewText(v)) }\n", settag, off)
 
 		// add the StringBytes() accessor to avoid copying the string around.
-		// note that the bytes will have the \x00 byte at the end of the string included in the []byte.
-		fprintf(&g, "func (s %s) %sBytes() []byte { return C.Struct(s).GetObject(%d).ToData() }\n", n.name, fname, off)
+		// note that the bytes would have the \x00 byte at the end of
+		// the string included in the []byte, so we use ToDataTrimLastByte()
+		// instead of ToData() to avoid that.
+		fprintf(&g, "func (s %s) %sBytes() []byte { return C.Struct(s).GetObject(%d).ToDataTrimLastByte() }\n", n.name, fname, off)
 
 	case TYPE_DATA:
 		assert(def.Which() == VALUE_VOID || def.Which() == VALUE_DATA, "expected data default")

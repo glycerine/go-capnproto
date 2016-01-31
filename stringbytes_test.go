@@ -56,7 +56,7 @@ func Test500StringBytesWorksAndDoesNoAllocation(t *testing.T) {
 
 			fmt.Printf("\n base.Name() = '%s'\n", base.Name())
 			fmt.Printf(" base.NameBytes() = '%s'\n", base.NameBytes())
-			cv.So(string(base.NameBytes()), cv.ShouldResemble, base.Name()+"\x00")
+			cv.So(string(base.NameBytes()), cv.ShouldResemble, base.Name())
 
 			// Bag - for vector of string, aka TextList
 			_, err = capn.ReadFromMemoryZeroCopyNoAlloc(bagBytes, multiBase)
@@ -68,7 +68,7 @@ func Test500StringBytesWorksAndDoesNoAllocation(t *testing.T) {
 
 			fmt.Printf("\n bag.Counter().Wordlist().AtAsBytes(0) = '%s'\n", string(bag.Counter().Wordlist().AtAsBytes(0)))
 			fmt.Printf(" bag.Counter().Wordlist().At(0) = '%s'\n", bag.Counter().Wordlist().At(0))
-			cv.So(string(bag.Counter().Wordlist().AtAsBytes(0)), cv.ShouldResemble, bag.Counter().Wordlist().At(0)+"\x00")
+			cv.So(string(bag.Counter().Wordlist().AtAsBytes(0)), cv.ShouldResemble, bag.Counter().Wordlist().At(0))
 		})
 	})
 }

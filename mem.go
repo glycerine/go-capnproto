@@ -249,6 +249,7 @@ func ReadFromMemoryZeroCopyNoAlloc(data []byte, multi *MultiBuffer) (bytesRead i
 	if multi.Segments[0] == nil {
 		panic("multi.Segment[0] must point to an allocated Segment{} to be resused in ReadFromMemoryZeroCopyNoAlloc()")
 	}
+
 	hdrsz := 8*(segnum/2) + 4
 
 	b := data[0:(hdrsz + 4)]

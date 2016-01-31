@@ -398,7 +398,7 @@ func NewRootPlaneBase(s *C.Segment) PlaneBase  { return PlaneBase(s.NewRootStruc
 func AutoNewPlaneBase(s *C.Segment) PlaneBase  { return PlaneBase(s.NewStructAR(32, 2)) }
 func ReadRootPlaneBase(s *C.Segment) PlaneBase { return PlaneBase(s.Root(0).ToStruct()) }
 func (s PlaneBase) Name() string               { return C.Struct(s).GetObject(0).ToText() }
-func (s PlaneBase) NameBytes() []byte          { return C.Struct(s).GetObject(0).ToData() }
+func (s PlaneBase) NameBytes() []byte          { return C.Struct(s).GetObject(0).ToDataTrimLastByte() }
 func (s PlaneBase) SetName(v string)           { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s PlaneBase) Homes() Airport_List        { return Airport_List(C.Struct(s).GetObject(1)) }
 func (s PlaneBase) SetHomes(v Airport_List)    { C.Struct(s).SetObject(1, C.Object(v)) }
@@ -1595,7 +1595,7 @@ func (s Z) SetU8(v uint8)             { C.Struct(s).Set16(0, 11); C.Struct(s).Se
 func (s Z) Bool() bool                { return C.Struct(s).Get1(64) }
 func (s Z) SetBool(v bool)            { C.Struct(s).Set16(0, 12); C.Struct(s).Set1(64, v) }
 func (s Z) Text() string              { return C.Struct(s).GetObject(0).ToText() }
-func (s Z) TextBytes() []byte         { return C.Struct(s).GetObject(0).ToData() }
+func (s Z) TextBytes() []byte         { return C.Struct(s).GetObject(0).ToDataTrimLastByte() }
 func (s Z) SetText(v string)          { C.Struct(s).Set16(0, 13); C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s Z) Blob() []byte              { return C.Struct(s).GetObject(0).ToData() }
 func (s Z) SetBlob(v []byte)          { C.Struct(s).Set16(0, 14); C.Struct(s).SetObject(0, s.Segment.NewData(v)) }
@@ -3495,7 +3495,7 @@ func ReadRootCounter(s *C.Segment) Counter { return Counter(s.Root(0).ToStruct()
 func (s Counter) Size() int64              { return int64(C.Struct(s).Get64(0)) }
 func (s Counter) SetSize(v int64)          { C.Struct(s).Set64(0, uint64(v)) }
 func (s Counter) Words() string            { return C.Struct(s).GetObject(0).ToText() }
-func (s Counter) WordsBytes() []byte       { return C.Struct(s).GetObject(0).ToData() }
+func (s Counter) WordsBytes() []byte       { return C.Struct(s).GetObject(0).ToDataTrimLastByte() }
 func (s Counter) SetWords(v string)        { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s Counter) Wordlist() C.TextList     { return C.TextList(C.Struct(s).GetObject(1)) }
 func (s Counter) SetWordlist(v C.TextList) { C.Struct(s).SetObject(1, C.Object(v)) }
@@ -3922,7 +3922,7 @@ func NewRootZjob(s *C.Segment) Zjob  { return Zjob(s.NewRootStruct(0, 2)) }
 func AutoNewZjob(s *C.Segment) Zjob  { return Zjob(s.NewStructAR(0, 2)) }
 func ReadRootZjob(s *C.Segment) Zjob { return Zjob(s.Root(0).ToStruct()) }
 func (s Zjob) Cmd() string           { return C.Struct(s).GetObject(0).ToText() }
-func (s Zjob) CmdBytes() []byte      { return C.Struct(s).GetObject(0).ToData() }
+func (s Zjob) CmdBytes() []byte      { return C.Struct(s).GetObject(0).ToDataTrimLastByte() }
 func (s Zjob) SetCmd(v string)       { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s Zjob) Args() C.TextList      { return C.TextList(C.Struct(s).GetObject(1)) }
 func (s Zjob) SetArgs(v C.TextList)  { C.Struct(s).SetObject(1, C.Object(v)) }
@@ -6117,7 +6117,7 @@ func NewRootHoldsText(s *C.Segment) HoldsText  { return HoldsText(s.NewRootStruc
 func AutoNewHoldsText(s *C.Segment) HoldsText  { return HoldsText(s.NewStructAR(0, 3)) }
 func ReadRootHoldsText(s *C.Segment) HoldsText { return HoldsText(s.Root(0).ToStruct()) }
 func (s HoldsText) Txt() string                { return C.Struct(s).GetObject(0).ToText() }
-func (s HoldsText) TxtBytes() []byte           { return C.Struct(s).GetObject(0).ToData() }
+func (s HoldsText) TxtBytes() []byte           { return C.Struct(s).GetObject(0).ToDataTrimLastByte() }
 func (s HoldsText) SetTxt(v string)            { C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
 func (s HoldsText) Lst() C.TextList            { return C.TextList(C.Struct(s).GetObject(1)) }
 func (s HoldsText) SetLst(v C.TextList)        { C.Struct(s).SetObject(1, C.Object(v)) }
@@ -6606,7 +6606,7 @@ func (s Endpoint) SetIp(v net.IP)            { C.Struct(s).SetObject(0, s.Segmen
 func (s Endpoint) Port() int16               { return int16(C.Struct(s).Get16(0)) }
 func (s Endpoint) SetPort(v int16)           { C.Struct(s).Set16(0, uint16(v)) }
 func (s Endpoint) Hostname() string          { return C.Struct(s).GetObject(1).ToText() }
-func (s Endpoint) HostnameBytes() []byte     { return C.Struct(s).GetObject(1).ToData() }
+func (s Endpoint) HostnameBytes() []byte     { return C.Struct(s).GetObject(1).ToDataTrimLastByte() }
 func (s Endpoint) SetHostname(v string)      { C.Struct(s).SetObject(1, s.Segment.NewText(v)) }
 func (s Endpoint) WriteJSON(w io.Writer) error {
 	b := bufio.NewWriter(w)
