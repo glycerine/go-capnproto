@@ -203,11 +203,10 @@ func ReadFromMemoryZeroCopy(data []byte) (seg *Segment, bytesRead int64, err err
 
 	hdrv := data[4:(hdrsz + 4)]
 	datav := data[hdrsz+4:]
-	datavLen := len(datav)
 	m := &MultiBuffer{make([]*Segment, segnum)}
 	for i := 0; i < segnum; i++ {
 		sz := int(binary.LittleEndian.Uint32(hdrv[4*i:])) * 8
-		if datavLen < sz {
+		if len(datav) < sz {
 			return nil, 0, io.EOF
 		}
 		m.Segments[i] = &Segment{m, datav[:sz], uint32(i), false}
