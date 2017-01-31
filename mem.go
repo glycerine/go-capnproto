@@ -172,7 +172,8 @@ func ReadFromStream(r io.Reader, buf *bytes.Buffer) (*Segment, error) {
 // to ReadFromMemoryZeroCopy().
 func ReadFromMemoryZeroCopy(data []byte) (seg *Segment, bytesRead int64, err error) {
 
-	if len(data) < 4 {
+	dataLen := len(data)
+	if dataLen < 4 {
 		return nil, 0, io.EOF
 	}
 
@@ -183,6 +184,9 @@ func ReadFromMemoryZeroCopy(data []byte) (seg *Segment, bytesRead int64, err err
 	segnum := int(binary.LittleEndian.Uint32(data[0:4]) + 1)
 	hdrsz := 8*(segnum/2) + 4
 
+	if dataLen < hdrsz+4 {
+		return nil, 0, io.EOF
+	}
 	b := data[0:(hdrsz + 4)]
 
 	total := 0
@@ -199,9 +203,13 @@ func ReadFromMemoryZeroCopy(data []byte) (seg *Segment, bytesRead int64, err err
 
 	hdrv := data[4:(hdrsz + 4)]
 	datav := data[hdrsz+4:]
+	datavLen := len(datav)
 	m := &MultiBuffer{make([]*Segment, segnum)}
 	for i := 0; i < segnum; i++ {
 		sz := int(binary.LittleEndian.Uint32(hdrv[4*i:])) * 8
+		if datavLen < sz {
+			return nil, 0, io.EOF
+		}
 		m.Segments[i] = &Segment{m, datav[:sz], uint32(i), false}
 		datav = datav[sz:]
 	}
