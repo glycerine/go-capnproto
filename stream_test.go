@@ -368,6 +368,35 @@ func TestReadFromPackedStream(t *testing.T) {
 	}
 }
 
+func TestModifyMultiSegmentMessage(t *testing.T) {
+	cv.Convey("Testing Read->Modify->Write of multi-segmented message:", t, func() {
+		// Create multi-segment message by capnp tool
+		cv.Convey("When we read from multi-segmented stream, we should get the original data", func() {
+			capnp := CapnpEncode(`(size = 100, words = "AAAAAAAAA", wordlist = ["word0", "word1", "word2", "word3", "word4"])`, "Counter", "--segment-size", "10")
+
+			seg, err := capn.ReadFromStream(bytes.NewReader(capnp), nil)
+			cv.So(err, cv.ShouldBeNil)
+
+			c := air.ReadRootCounter(seg)
+			cv.So(c.Size(), cv.ShouldEqual, 100)
+			cv.So(c.Words(), cv.ShouldEqual, "AAAAAAAAA")
+			cv.So(c.Wordlist().Len(), cv.ShouldEqual, 5)
+			cv.So(c.Wordlist().At(0), cv.ShouldEqual, "word0")
+			cv.So(c.Wordlist().At(1), cv.ShouldEqual, "word1")
+
+			cv.Convey("When we set new value on 'words' field, another field should not be changed", func() {
+				c.SetWords("hello, capnp!")
+
+				cv.So(c.Size(), cv.ShouldEqual, 100)
+				cv.So(c.Words(), cv.ShouldEqual, "hello, capnp!")
+				cv.So(c.Wordlist().Len(), cv.ShouldEqual, 5)
+				cv.So(c.Wordlist().At(0), cv.ShouldEqual, "word0")
+				cv.So(c.Wordlist().At(1), cv.ShouldEqual, "word1")
+			})
+		})
+	})
+}
+
 func BenchmarkCompressor(b *testing.B) {
 	r := zdateReader(100, false)
 	buf, err := ioutil.ReadAll(r)

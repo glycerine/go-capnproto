@@ -156,7 +156,7 @@ func ReadFromStream(r io.Reader, buf *bytes.Buffer) (*Segment, error) {
 	m := &MultiBuffer{make([]*Segment, segnum)}
 	for i := 0; i < segnum; i++ {
 		sz := int(binary.LittleEndian.Uint32(hdrv[4*i:])) * 8
-		m.Segments[i] = &Segment{m, datav[:sz], uint32(i), false}
+		m.Segments[i] = &Segment{m, datav[:sz:sz], uint32(i), false}
 		datav = datav[sz:]
 	}
 

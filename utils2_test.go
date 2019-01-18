@@ -20,7 +20,7 @@ func init() {
 	zerohi32 = uint64(u32)
 }
 
-func CapnpEncode(msg string, typ string) []byte {
+func CapnpEncode(msg string, typ string, extra_args ...string) []byte {
 	capnpPath, err := exec.LookPath("capnp")
 	//capnpPath, err := exec.LookPath("tee")
 	if err != nil {
@@ -31,8 +31,8 @@ func CapnpEncode(msg string, typ string) []byte {
 	}
 
 	schfn := "aircraftlib/aircraft.capnp"
-	args := []string{"encode", schfn, typ}
-	cmdline := fmt.Sprintf("%s %s %s %s", capnpPath, "encode", schfn, typ)
+	args := append([]string{"encode", schfn, typ}, extra_args...)
+	cmdline := fmt.Sprintf("%s %s", capnpPath, strings.Join(args, " "))
 	//fmt.Printf("cmdline = %s\n", cmdline)
 	c := exec.Command(capnpPath, args...)
 
