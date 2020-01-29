@@ -8,6 +8,12 @@ import (
 	cv "github.com/glycerine/goconvey/convey"
 )
 
+// https://github.com/golang/go/issues/31859#issuecomment-489889428
+var _ = func() bool {
+	testing.Init()
+	return true
+}()
+
 func TestCreationOfZDate(t *testing.T) {
 	const n = 1
 	packed := false
